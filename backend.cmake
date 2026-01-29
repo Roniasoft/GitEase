@@ -18,6 +18,9 @@ set(SOURCES_BACKEND
     Src/Git/Models/GitDiff.cpp
     Src/Git/Models/GitFileStatus.cpp
     Src/Git/Models/Repository.cpp
+
+    Src/Git/Auth/GitSshAuth.cpp
+    Src/Git/Auth/GitHttpsAuth.cpp
 )
 
 set(HEADERS_BACKEND
@@ -42,6 +45,9 @@ set(HEADERS_BACKEND
     Src/Git/Models/GitFileStatus.h
     Src/Git/Models/Repository.h
 
+    Src/Git/Auth/IGitAuth.h
+    Src/Git/Auth/GitSshAuth.h
+    Src/Git/Auth/GitHttpsAuth.h
 )
 
 set(INCLUDE_DIRS_BACKEND
