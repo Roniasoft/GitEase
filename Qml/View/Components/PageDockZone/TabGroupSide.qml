@@ -14,9 +14,10 @@ Item {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property var docks: []
-    property int activeIndex: 0
-    property int position: Enums.DockPosition.Left
+    property var  docks: []
+    property int  activeIndex: 0
+    property int  position: Enums.DockPosition.Left
+    property bool isEditing: false
 
     // Preferred thickness for this dock area.
     // - Left/Right: width
@@ -50,7 +51,7 @@ Item {
         // Vertical (Left/Right) resize handle
         Rectangle {
             id: vResizeHandle
-            visible: root.isVertical && root.docks.length > 0
+            visible: root.isVertical && root.docks.length > 0 && root.isEditing
             width: vMouse.containsMouse || vMouse.pressed ? root.handleSize : root.handleSize * 0.5
             height: parent.height
             anchors.top: parent.top
@@ -90,7 +91,7 @@ Item {
         // Horizontal (Top/Bottom) resize handle
         Rectangle {
             id: hResizeHandle
-            visible: !root.isVertical && root.docks.length > 0
+            visible: !root.isVertical && root.docks.length > 0 && root.isEditing
             width: parent.width
             height: hMouse.containsMouse || hMouse.pressed ? root.handleSize : root.handleSize * 0.5
             anchors.left: parent.left
