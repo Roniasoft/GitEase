@@ -20,6 +20,7 @@ Item {
     required property string title
     property bool isDragging: false
     property bool isFloating: true
+    property bool isEditing: false
     property int position: -1
 
     readonly property int resizeHandleSize: 10
@@ -79,7 +80,7 @@ Item {
                 z: 2
                 color: dragArea.containsMouse ? Qt.darker("#F9F9F9", 1.1) : "#F9F9F9"
                 radius: 6
-                visible: root.enabled
+                visible: root.isFloating || root.isEditing
 
                 Behavior on color {
                     ColorAnimation {
