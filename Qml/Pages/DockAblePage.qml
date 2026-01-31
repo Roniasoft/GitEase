@@ -29,8 +29,6 @@ Item {
     readonly property real defaultWidth: 300
     readonly property real defaultHeight: 180
 
-    readonly property real minCenterSize: 200
-
     /* Children
      * ****************************************************************************************/
     onDocksChanged: {
@@ -84,7 +82,7 @@ Item {
                 docks: root.leftSideTabGroupDocks
                 preferredSize: root.defaultWidth
                 minPreferredSize: 160
-                maxPreferredSize: Math.max(minPreferredSize, root.width - (root.rightSideTabGroupDocks.length > 0 ? rightTabGroup.preferredSize : 0) - root.minCenterSize)
+                maxPreferredSize: Math.max(minPreferredSize, root.width - (root.rightSideTabGroupDocks.length > 0 ? rightTabGroup.preferredSize : 0))
             }
         }
 
@@ -107,7 +105,7 @@ Item {
                     docks: root.topSideTabGroupDocks
                     preferredSize: root.defaultHeight
                     minPreferredSize: 120
-                    maxPreferredSize: Math.max(minPreferredSize, root.height - (root.bottomSideTabGroupDocks.length > 0 ? bottomTabGroup.preferredSize : 0) - root.minCenterSize)
+                    maxPreferredSize: Math.max(minPreferredSize, root.height - (root.bottomSideTabGroupDocks.length > 0 ? bottomTabGroup.preferredSize : 0))
                 }
             }
 
@@ -144,7 +142,7 @@ Item {
                     docks: root.bottomSideTabGroupDocks
                     preferredSize: root.defaultHeight
                     minPreferredSize: 120
-                    maxPreferredSize: Math.max(minPreferredSize, root.height - (root.topSideTabGroupDocks.length > 0 ? topTabGroup.preferredSize : 0) - root.minCenterSize)
+                    maxPreferredSize: Math.max(minPreferredSize, root.height - (root.topSideTabGroupDocks.length > 0 ? topTabGroup.preferredSize : 0))
                 }
             }
         }
@@ -162,7 +160,7 @@ Item {
                 docks: root.rightSideTabGroupDocks
                 preferredSize: root.defaultWidth
                 minPreferredSize: 160
-                maxPreferredSize: Math.max(minPreferredSize, root.width - (root.leftSideTabGroupDocks.length > 0 ? leftTabGroup.preferredSize : 0) - root.minCenterSize)
+                maxPreferredSize: Math.max(minPreferredSize, root.width - (root.leftSideTabGroupDocks.length > 0 ? leftTabGroup.preferredSize : 0))
             }
         }
     }
