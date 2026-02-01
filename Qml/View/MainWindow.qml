@@ -35,6 +35,137 @@ Rectangle {
             content: (pageLoader.item && pageLoader.item.hasOwnProperty("headerContent")) ? pageLoader.item.headerContent : null
         }
 
+        // Design Mode Banner
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 30
+            visible: root.uiSession?.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? false
+            color: Qt.rgba(Style.colors.accent.r, Style.colors.accent.g, Style.colors.accent.b, 0.15)
+            Layout.leftMargin: 4
+            Layout.topMargin: 1
+            Layout.rightMargin: 4
+            Layout.bottomMargin: 1
+            radius: 3
+            border.color: Style.colors.accent
+            border.width: 1
+            
+            RowLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.leftMargin: 8
+                anchors.rightMargin: 8
+                spacing: 10
+
+                Rectangle {
+                    Layout.preferredWidth: 3
+                    Layout.preferredHeight: 18
+                    color: Style.colors.accent
+                    radius: 2
+                }
+
+                Text {
+                    Layout.fillWidth: true
+                    text: "Designing Pages Layout"
+                    font.pixelSize: 12
+                    color: Style.colors.foreground
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                Item { Layout.fillWidth: true }
+
+                Button {
+                    implicitHeight: 24
+                    topInset: 0
+                    bottomInset: 0
+                    topPadding: 0
+                    bottomPadding: 0
+                    text: "Cancel"
+                    font.pixelSize: 11
+                    hoverEnabled: true
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        color: Style.colors.foreground
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+                    background: Rectangle {
+                        implicitWidth: 80
+                        implicitHeight: 24
+                        color: parent.down ? Qt.darker(Style.colors.secondaryBackground, 1.15) : (parent.hovered ? Qt.lighter(Style.colors.secondaryBackground, 1.1) : Style.colors.secondaryBackground)
+                        border.color: Qt.darker(Style.colors.secondaryBackground, 1.2)
+                        border.width: 1
+                        radius: 4
+                    }
+                    onClicked: {
+                        root.uiSession.appModel.appSettings.appearanceSettings.designPagesLayout = false
+                    }
+                }
+
+                Button {
+                    implicitHeight: 24
+                    topInset: 0
+                    bottomInset: 0
+                    topPadding: 0
+                    bottomPadding: 0
+                    text: "Set Default"
+                    font.pixelSize: 11
+                    hoverEnabled: true
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        color: Style.colors.foreground
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+                    background: Rectangle {
+                        implicitWidth: 100
+                        implicitHeight: 24
+                        color: parent.down ? Qt.darker(Style.colors.secondaryBackground, 1.15) : (parent.hovered ? Qt.lighter(Style.colors.secondaryBackground, 1.1) : Style.colors.secondaryBackground)
+                        border.color: Qt.darker(Style.colors.secondaryBackground, 1.2)
+                        border.width: 1
+                        radius: 4
+                    }
+                    onClicked: {
+                        // Reset to default logic here
+                    }
+                }
+
+                Button {
+                    implicitHeight: 24
+                    topInset: 0
+                    bottomInset: 0
+                    topPadding: 0
+                    bottomPadding: 0
+                    text: "Save"
+                    font.pixelSize: 11
+                    hoverEnabled: true
+                    contentItem: Text {
+                        text: parent.text
+                        font: parent.font
+                        color: Style.colors.secondaryForeground
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
+                        anchors.centerIn: parent
+                    }
+                    background: Rectangle {
+                        implicitWidth: 80
+                        implicitHeight: 24
+                        color: parent.down ? Qt.darker(Style.colors.accent, 1.15) : (parent.hovered ? Qt.lighter(Style.colors.accent, 1.15) : Style.colors.accent)
+                        border.width: 0
+                        radius: 4
+                    }
+                    onClicked: {
+                        // TODO Save Layout
+                        root.uiSession.appModel.appSettings.appearanceSettings.designPagesLayout = false
+                    }
+                }
+            }
+        }
+
         RowLayout {
             Layout.fillWidth: true
             Layout.fillHeight: true
