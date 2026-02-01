@@ -35,6 +35,8 @@ DockAblePage {
     property string selectedCommit: ""
     property string selectedFilePath: ""
 
+    layoutIsEditing: root.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? false
+
     // Exposed to MainWindow's header area (see MainWindow.qml)
     property Component headerContent: Component {
         RowLayout {
