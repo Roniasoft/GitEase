@@ -5,6 +5,11 @@ void GitSshAuth::apply(git_fetch_options& fetchOpts)
     fetchOpts.callbacks.credentials = &GitSshAuth::credentialsCallback;
 }
 
+void GitSshAuth::applyPush(git_push_options& opts)
+{
+    opts.callbacks.credentials = &credentialsCallback;
+}
+
 int GitSshAuth::credentialsCallback(git_cred** out,
                                     const char*,
                                     const char* username_from_url,
@@ -21,6 +26,3 @@ int GitSshAuth::credentialsCallback(git_cred** out,
 
     return GIT_PASSTHROUGH;
 }
-
-
-

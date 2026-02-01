@@ -16,4 +16,7 @@ public:
      * @param fetchOpts libgit2 fetch options to modify
      */
     virtual void apply(git_fetch_options& fetchOpts) = 0;
+
+    /// For push
+    virtual void applyPush(git_push_options& pushOpts) = 0;
 };

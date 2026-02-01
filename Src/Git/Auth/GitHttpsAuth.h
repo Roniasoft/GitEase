@@ -3,6 +3,7 @@
 #include "IGitAuth.h"
 #include <QString>
 #include "GitRepository.h"
+#include "GitRemote.h"
 
 /**
  * @brief HTTPS authentication using token/password.
@@ -52,4 +53,6 @@ public:
      * @param fetchOpts libgit2 fetch options to modify
      */
     void apply(git_fetch_options& fetchOpts) override;
+
+    void applyPush(git_push_options& opts) override;
 };
