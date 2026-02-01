@@ -23,6 +23,7 @@ Item {
     property var bottomSideTabGroupDocks: []
 
     property bool showDropZone: false
+    property bool layoutIsEditing: false
     property var activeDraggingDock: null
     property int hoveredDockPosition: -1
 
@@ -33,6 +34,12 @@ Item {
      * ****************************************************************************************/
     onDocksChanged: {
         root.updateSideDocks()
+    }
+
+    onLayoutIsEditingChanged: {
+        docks.forEach((dock)=>{
+              dock.layoutIsEditing = root.layoutIsEditing
+          })
     }
 
     PageDropZone{
@@ -80,6 +87,7 @@ Item {
                 anchors.fill: parent
                 position: Enums.DockPosition.Left
                 docks: root.leftSideTabGroupDocks
+                isEditing: root.layoutIsEditing
                 preferredSize: root.defaultWidth
                 minPreferredSize: 160
                 maxPreferredSize: Math.max(minPreferredSize, root.width - (root.rightSideTabGroupDocks.length > 0 ? rightTabGroup.preferredSize : 0))
@@ -103,6 +111,7 @@ Item {
                     anchors.fill: parent
                     position: Enums.DockPosition.Top
                     docks: root.topSideTabGroupDocks
+                    isEditing: root.layoutIsEditing
                     preferredSize: root.defaultHeight
                     minPreferredSize: 120
                     maxPreferredSize: Math.max(minPreferredSize, root.height - (root.bottomSideTabGroupDocks.length > 0 ? bottomTabGroup.preferredSize : 0))
@@ -140,6 +149,7 @@ Item {
                     anchors.fill: parent
                     position: Enums.DockPosition.Bottom
                     docks: root.bottomSideTabGroupDocks
+                    isEditing: root.layoutIsEditing
                     preferredSize: root.defaultHeight
                     minPreferredSize: 120
                     maxPreferredSize: Math.max(minPreferredSize, root.height - (root.topSideTabGroupDocks.length > 0 ? topTabGroup.preferredSize : 0))
@@ -158,6 +168,7 @@ Item {
                 anchors.fill: parent
                 position: Enums.DockPosition.Right
                 docks: root.rightSideTabGroupDocks
+                isEditing: root.layoutIsEditing
                 preferredSize: root.defaultWidth
                 minPreferredSize: 160
                 maxPreferredSize: Math.max(minPreferredSize, root.width - (root.leftSideTabGroupDocks.length > 0 ? leftTabGroup.preferredSize : 0))
