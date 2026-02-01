@@ -109,6 +109,7 @@ Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             color: Style.colors.secondaryBackground
+            visible: !root.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? true
 
             expanded: root.expanded
             repositoryController: root.repositoryController
@@ -130,6 +131,7 @@ Rectangle {
             Layout.preferredHeight: 33
             radius: 6
             color: "transparent"
+            visible: !root.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? true
 
             Behavior on color { ColorAnimation { duration: 120 } }
 
@@ -203,6 +205,7 @@ Rectangle {
             Layout.preferredHeight: 33
             radius: 6
             color: "transparent"
+            visible: !root.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? true
 
             Behavior on color { ColorAnimation { duration: 120 } }
 
