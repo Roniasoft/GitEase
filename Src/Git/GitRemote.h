@@ -4,37 +4,23 @@
 #include "Repository.h"
 #include <QObject>
 
-#include "Auth/IGitAuth.h"
-#include "Auth/GitSshAuth.h"
-#include "Auth/GitHttpsAuth.h"
+#include "GitRepository.h"
 
 class GitResult;
 class GitRemote : public IGitController
 {
     Q_OBJECT
     QML_ELEMENT
+
+private:
+
+    GitResult internalpush(const QString& remoteName,
+                           const QString& branchName,
+                           std::unique_ptr<IGitAuth> auth,
+                           bool force);
+
 public:
     explicit GitRemote(QObject *parent = nullptr);
-
-    struct GitAuthPayload {
-        GitRemote* owner;   // GitRepository or GitRemote
-        IGitAuth* auth;
-    };
-
-    // /**
-    //  * \brief Push commits to a remote repository
-    //  * \param remoteName Name of the remote (default: "origin")
-    //  * \param branchName Branch to push (default: current branch)
-    //  * \param username GitHub username (required for HTTPS)
-    //  * \param password GitHub Personal Access Token (required for HTTPS)
-    //  * \param force Whether to force push (default: false)
-    //  * \return GitResult with operation result
-    //  */
-    // Q_INVOKABLE GitResult push(const QString &remoteName = "origin",
-    //                              const QString &branchName = "",
-    //                              const QString &username = "",
-    //                              const QString &password = "",
-    //                              bool force = false);
 
     Q_INVOKABLE GitResult push(const QString& remote,
                                const QString& branch,
@@ -44,12 +30,6 @@ public:
                                const QString& branch,
                                const QString& token,
                                bool force = false);
-
-    GitResult internalpush(
-        const QString& remoteName,
-        const QString& branchName,
-        std::unique_ptr<IGitAuth> auth,
-        bool force);
 
     /**
      * \brief Get list of remotes for the repository

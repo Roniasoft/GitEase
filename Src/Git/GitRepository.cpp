@@ -6,9 +6,6 @@
 
 #include <git2.h>
 
-
-
-
 GitRepository::GitRepository(QObject *parent)
     : IGitController{parent}
 {
@@ -73,7 +70,6 @@ GitResult GitRepository::open(const QString &path)
         git_repository_free(m_currentRepo->repo);
     }
 
-
     // Convert path to UTF-8
     QByteArray pathUtf8 = path.toUtf8();
 
@@ -122,13 +118,13 @@ GitResult GitRepository::cloneInternal(const QString& url,
          safePath,
          auth = std::move(auth)]() mutable -> QVariantMap {
 
-        GitClonePayload payload {
+        GitPayload payload {
             this,
             auth.get()
         };
 
         auto progressCallback = [](const git_indexer_progress *stats, void *p) -> int {
-            auto *data = static_cast<GitClonePayload*>(p);
+            auto *data = static_cast<GitPayload*>(p);
 
             if (stats->total_objects > 0) {
                 int percent = static_cast<int>(

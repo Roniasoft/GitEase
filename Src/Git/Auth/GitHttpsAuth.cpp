@@ -22,7 +22,7 @@ int GitHttpsAuth::credentialsCallback(git_cred** out,
                                         unsigned int allowed_types,
                                         void* payload)
 {
-    GitRemote::GitAuthPayload* paylaod = static_cast<GitRemote::GitAuthPayload*>(payload);
+    GitRepository::GitPayload* paylaod = static_cast<GitRepository::GitPayload*>(payload);
 
     GitHttpsAuth* httpsAuth  = static_cast<GitHttpsAuth*>(paylaod->auth);
 

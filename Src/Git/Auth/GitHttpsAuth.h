@@ -3,7 +3,6 @@
 #include "IGitAuth.h"
 #include <QString>
 #include "GitRepository.h"
-#include "GitRemote.h"
 
 /**
  * @brief HTTPS authentication using token/password.
