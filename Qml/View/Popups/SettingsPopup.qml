@@ -139,8 +139,16 @@ IPopup {
                                     cmb.model: ["Modern Light", "Modern Dark"]
                                 }
 
-
-
+                                ButtonItem {
+                                    Layout.fillWidth: true
+                                    title: "Design Pages Layout"
+                                    description: "Customize the layout and arrangement of pages"
+                                    buttonText: "Start Designing"
+                                    onClicked: {
+                                        root.appSettings.appearanceSettings.designPagesLayout = true
+                                        root.close()
+                                    }
+                                }
 
                                 Rectangle {
                                     Layout.fillWidth: true
