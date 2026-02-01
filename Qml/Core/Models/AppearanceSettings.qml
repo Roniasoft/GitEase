@@ -12,6 +12,7 @@ QtObject {
      * ****************************************************************************************/
 
     property                string              currentTheme:             "Modern Light"
+    property                bool                designPagesLayout:        false
 
     /* Functions
      * ****************************************************************************************/
