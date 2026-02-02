@@ -1,13 +1,13 @@
 #include "GitSshAuth.h"
 
-void GitSshAuth::apply(git_fetch_options& fetchOpts)
+void GitSshAuth::applyFetch(git_fetch_options& fetchOpts)
 {
     fetchOpts.callbacks.credentials = &GitSshAuth::credentialsCallback;
 }
 
-void GitSshAuth::applyPush(git_push_options& opts)
+void GitSshAuth::applyPush(git_push_options& pushopts)
 {
-    opts.callbacks.credentials = &credentialsCallback;
+    pushopts.callbacks.credentials = &credentialsCallback;
 }
 
 int GitSshAuth::credentialsCallback(git_cred** out,

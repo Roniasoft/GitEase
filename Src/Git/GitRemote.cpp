@@ -14,7 +14,7 @@ GitResult GitRemote::push(const QString& remote,
                           const QString& branch,
                           bool force)
 {
-    return internalpush(remote, branch,
+    return pushInternal(remote, branch,
                         std::make_unique<GitSshAuth>(), force);
 }
 
@@ -23,11 +23,11 @@ GitResult GitRemote::push(const QString& remote,
                            const QString& token,
                            bool force)
 {
-    return internalpush(remote, branch,
+    return pushInternal(remote, branch,
                         std::make_unique<GitHttpsAuth>(token), force);
 }
 
-GitResult GitRemote::internalpush(const QString& remoteName,
+GitResult GitRemote::pushInternal(const QString& remoteName,
                                   const QString& branchName,
                                   std::unique_ptr<IGitAuth> auth,
                                   bool force)

@@ -14,7 +14,21 @@ class GitRemote : public IGitController
 
 private:
 
-    GitResult internalpush(const QString& remoteName,
+    /**
+     * @brief Internal implementation for pushing commits to a remote.
+     *
+     * Performs a git push operation using the provided authentication
+     * strategy. This method is shared by both SSH and HTTPS push
+     * entry points.
+     *
+     * @param remoteName Name of the remote (e.g. "origin")
+     * @param branchName Name of the branch to push
+     * @param auth       Authentication strategy (ownership transferred)
+     * @param force      Whether to force push
+     *
+     * @return GitResult containing the push result
+     */
+    GitResult pushInternal(const QString& remoteName,
                            const QString& branchName,
                            std::unique_ptr<IGitAuth> auth,
                            bool force);
@@ -22,10 +36,35 @@ private:
 public:
     explicit GitRemote(QObject *parent = nullptr);
 
+    /**
+     * @brief Push commits to a remote using SSH authentication.
+     *
+     * Uses the system SSH agent or default SSH keys to authenticate
+     * the push operation.
+     *
+     * @param remote Name of the remote (default: "origin")
+     * @param branch Name of the branch to push
+     * @param force  Whether to force push (default: false)
+     *
+     * @return GitResult with operation result
+     */
     Q_INVOKABLE GitResult push(const QString& remote,
                                const QString& branch,
                                bool force = false);
 
+    /**
+     * @brief Push commits to a remote using HTTPS authentication.
+     *
+     * Uses a personal access token to authenticate the push
+     * operation over HTTPS.
+     *
+     * @param remote Name of the remote (default: "origin")
+     * @param branch Name of the branch to push
+     * @param token  Personal access token
+     * @param force  Whether to force push (default: false)
+     *
+     * @return GitResult with operation result
+     */
     Q_INVOKABLE GitResult push(const QString& remote,
                                const QString& branch,
                                const QString& token,

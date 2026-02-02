@@ -147,7 +147,7 @@ GitResult GitRepository::cloneInternal(const QString& url,
         opts.fetch_opts.callbacks.transfer_progress = progressCallback;
         opts.fetch_opts.callbacks.payload = &payload;
 
-        auth->apply(opts.fetch_opts);
+        auth->applyFetch(opts.fetch_opts);
 
         git_repository* repo = nullptr;
         int result = git_clone(

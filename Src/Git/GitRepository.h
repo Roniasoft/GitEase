@@ -47,8 +47,8 @@ public:
      * authentication strategy (for credentials).
      */
     struct GitPayload {
-        QObject* parentThread;    ///< Owner repository (UI + signals)
-        IGitAuth* auth;                 ///< Authentication strategy
+        QObject* parentThread;  ///< Owner repository (UI + signals)
+        IGitAuth* auth;         ///< Authentication strategy
     };
 
     /**

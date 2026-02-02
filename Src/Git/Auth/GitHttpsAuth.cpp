@@ -6,14 +6,14 @@ GitHttpsAuth::GitHttpsAuth(const QString& token)
 {
 }
 
-void GitHttpsAuth::apply(git_fetch_options& fetchOpts)
+void GitHttpsAuth::applyFetch(git_fetch_options& fetchOpts)
 {
     fetchOpts.callbacks.credentials = &GitHttpsAuth::credentialsCallback;
 }
 
-void GitHttpsAuth::applyPush(git_push_options &opts)
+void GitHttpsAuth::applyPush(git_push_options &pushopts)
 {
-    opts.callbacks.credentials = &GitHttpsAuth::credentialsCallback;
+    pushopts.callbacks.credentials = &GitHttpsAuth::credentialsCallback;
 }
 
 int GitHttpsAuth::credentialsCallback(git_cred** out,
