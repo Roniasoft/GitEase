@@ -26,6 +26,7 @@ QtObject{
     property string clock:             "\uf017" // clock
     property string download:          "\ue094" // download
     property string upload:            "\ue09a" // upload
+    property string codeBranch:        "\uf126" // codeBranch
     property string gear:              "\uf013" // gear (settings)
     property string plus:              "\uf067" // plus
     property string minus:             "\uf068" // minus

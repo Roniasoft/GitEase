@@ -32,7 +32,7 @@ Item {
 
     GridLayout {
         anchors.fill: parent
-        columns: 3
+        columns: 4
         rows: 2
         columnSpacing: 5
         rowSpacing: 5
@@ -44,6 +44,17 @@ Item {
 
             branchController: root.branchController
             bundleController: root.bundleController
+        }
+
+        BranchView {
+            id: branchManagementView
+            Layout.preferredHeight: 370
+            Layout.preferredWidth: 330
+            Layout.fillWidth: false
+            Layout.alignment: Qt.AlignTop
+
+            branchController: root.branchController
+            createBranchPopup: uiSessionPopups.createBranchPopup
         }
 
         RemoteView {

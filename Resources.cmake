@@ -101,6 +101,7 @@ set(RESOURCES_COMPONENTS
     Qml/View/Components/ImportExport/ExportView.qml
 
     Qml/View/Components/Remotes/RemoteView.qml
+    Qml/View/Components/Branch/BranchView.qml
 
     # DockPanel Docks
     Qml/View/Components/Docks/ImportExportBundleDock.qml       # Import Export git Bundle Dock
@@ -123,6 +124,7 @@ set(RESOURCES_POPUPS
     Qml/View/Popups/SettingsPopup.qml
     Qml/View/Popups/IPopup.qml
     Qml/View/Popups/AddEditRemotePopup.qml
+    Qml/View/Popups/CreateBranchPopup.qml
 
 )
 
