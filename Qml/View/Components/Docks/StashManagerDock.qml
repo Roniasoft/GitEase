@@ -1,47 +1,46 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Dialogs
 
 import GitEase_Style_Impl
 import GitEase_Style
 import GitEase
 
 /*! ***********************************************************************************************
- * RemoteView
+ * StashManagerDock
  * ************************************************************************************************/
 
 UtilitiesCard {
     id: root
 
+
     /* Property Declarations
      * ****************************************************************************************/
-    property int currentIndex: 0
+    property StashController stashController: null
 
-    property RemoteController remoteController: null
-
-    property AddEditRemotePopup addEditRemotePopup: null
-
+    property AddStashPopup   addStashPopup: null
 
     /* Object Properties
      * ****************************************************************************************/
+    title: "Stash Manager"
+    icon: Style.icons.archive
 
-    title: "Remotes"
-    icon: Style.icons.upload
 
     content: ColumnLayout {
         id: content
-        spacing: 10
+
+        anchors.fill: parent
+        spacing: 16
 
         Connections {
             target: root
-            onRemoteControllerChanged: {
+            onStashControllerChanged: {
                 content.update()
             }
         }
 
         Connections {
-            target: root.addEditRemotePopup
+            target: root.addStashPopup
 
             function onAboutToHide() {
                 content.update()
@@ -56,9 +55,6 @@ UtilitiesCard {
             clip: true
 
             delegate: Rectangle {
-
-                property Remote remote: modelData
-
                 width: listView.width
                 height: 60
                 color: Style.colors.secondaryBackground
@@ -69,36 +65,52 @@ UtilitiesCard {
                     anchors.margins: 10
 
                     ColumnLayout {
-                        width: parent.width * 0.85
+                        width: parent.width * 0.8
                         anchors.verticalCenter: parent.verticalCenter
                         spacing: 2
 
                         Text {
-                            text: remote.name
+                            text: modelData.message || qsTr("WIP on %1").arg(modelData.author || "unknown")
                             color: Style.colors.foreground
                             font.family: Style.fontTypes.roboto
                             font.pixelSize: 12
+                            elide: Text.ElideMiddle
+                            Layout.fillWidth: true
                         }
                         Text {
-                            text: remote.url
+                            text: modelData.dateTime ? Qt.formatDateTime(modelData.dateTime, "MMM dd, yyyy 'at' hh:mm") : ""
                             color: Style.colors.mutedText
                             font.family: Style.fontTypes.roboto
                             font.pixelSize: 10
+                            Layout.fillWidth: true
                             elide: Text.ElideRight
                         }
                     }
 
                     Row {
                         spacing: 4
-                        width: parent.width * 0.15
+                        width: parent.width * 0.2
                         anchors.verticalCenter: parent.verticalCenter
                         ActionIconButton {
-                            iconText: Style.icons.edit
-                            tooltip: "Edit"
+                            iconText: Style.icons.undo
+                            tooltip: "Pop"
                             textColor: Style.colors.mutedText
                             onClicked: {
-                                addEditRemotePopup.oldRemote = remote
-                                openAddEditPopup()
+                                let result = stashController.pop(modelData.index, true)
+                                if (result.success) {
+                                    content.update()
+                                }
+                            }
+                        }
+                        ActionIconButton {
+                            iconText: Style.icons.check
+                            tooltip: "Apply"
+                            textColor: Style.colors.mutedText
+                            onClicked: {
+                                let result = stashController.apply(modelData.index, true)
+                                if (result.success) {
+                                    content.update()
+                                }
                             }
                         }
                         ActionIconButton {
@@ -106,13 +118,16 @@ UtilitiesCard {
                             tooltip: "Remove"
                             textColor: Style.colors.deletededFile
                             onClicked: {
-                                root.remoteController.removeRemote(remote.name)
-                                content.update()
+                                let result = stashController.remove(modelData.index)
+                                if (result.success) {
+                                    content.update()
+                                }
                             }
                         }
                     }
                 }
             }
+
         }
 
         Button {
@@ -143,7 +158,7 @@ UtilitiesCard {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "Add New Remote"
+                        text: "Stash"
                         color: Style.colors.secondaryForeground
                         font.pixelSize: 13
                         horizontalAlignment: Text.AlignHCenter
@@ -158,23 +173,28 @@ UtilitiesCard {
         }
 
         function update() {
-            if (remoteController) {
-                let res = remoteController.getRemotes();
-                if (res.success) {
-                    listView.model = res.data
-                }
+            if (!stashController)
+                return
+
+            let result = stashController.list()
+            if (result.success) {
+                listView.model = result.data
+            } else {
+                listView.model = []
             }
         }
-    }
 
+    }
 
     /* Functions
      * ****************************************************************************************/
 
     function openAddEditPopup() {
-        addEditRemotePopup.remoteController = root.remoteController
-        addEditRemotePopup.open()
+        addStashPopup.stashController = root.stashController
+        addStashPopup.open()
     }
 
-
 }
+
+
+
