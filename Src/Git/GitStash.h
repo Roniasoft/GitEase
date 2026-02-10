@@ -57,6 +57,17 @@ public:
      */
     Q_INVOKABLE GitResult pop(int index = 0, bool reinstateIndex = true);
 
+    /**
+     * \brief Check whether the repository has changes that can be stashed
+     *
+     * Returns true if there are any staged, modified, or untracked files
+     * in the working directory or index. This matches the behavior of
+     * `git stash` in the CLI.
+     *
+     * \return true if there is something to stash, false otherwise
+     */
+    Q_INVOKABLE bool hasStashableChanges() const;
+
 private:
     // Payload passed to the foreach callback
     struct ListPayload {

@@ -152,3 +152,27 @@ GitResult GitStash::pop(int index, bool reinstateIndex)
 
     return GitResult(true, QVariant(), "Stash popped successfully.");
 }
+
+bool GitStash::hasStashableChanges() const
+{
+    if (!m_currentRepo || !m_currentRepo->repo)
+        return false;
+
+    git_status_options opts = GIT_STATUS_OPTIONS_INIT;
+    opts.show  = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+    opts.flags = GIT_STATUS_OPT_INCLUDE_UNTRACKED |
+                 GIT_STATUS_OPT_RENAMES_HEAD_TO_INDEX;
+
+    git_status_list* status = nullptr;
+    if (git_status_list_new(&status, m_currentRepo->repo, &opts) != GIT_OK)
+        return false;
+
+    size_t count = git_status_list_entrycount(status);
+    git_status_list_free(status);
+
+    if(count > 0)
+        return true;
+
+    return false;
+}
+

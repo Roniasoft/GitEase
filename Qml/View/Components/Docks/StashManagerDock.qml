@@ -134,6 +134,8 @@ UtilitiesCard {
             Layout.fillWidth: true
             implicitHeight: 44
 
+            enabled: stashController && stashController.hasStashableChanges()
+
             background: Rectangle {
                 radius: 8
                 color: enabled ? Style.colors.accent : Style.colors.disabledButton
