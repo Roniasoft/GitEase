@@ -27,6 +27,7 @@ QtObject{
     property string download:          "\ue094" // download
     property string upload:            "\ue09a" // upload
     property string gear:              "\uf013" // gear (settings)
+    property string bell:              "\uf0f3" // bell (notification)
     property string plus:              "\uf067" // plus
     property string minus:             "\uf068" // minus
     property string trash:             "\uf1f8" // trash
@@ -50,4 +51,13 @@ QtObject{
     property string branch:            "\uf126"
 
     property string arowLeftRight:     "\uf0ec"
+    
+    // Calendar icons
+    property string calendar:          "\uf133" // calendar
+    property string calendarDay:       "\uf783" // calendar-day
+    property string calendarMinus:     "\uf272" // calendar-minus
+    property string calendarWeek:      "\uf784" // calendar-week
+    property string calendarCheck:     "\uf274" // calendar-check
+    property string clockRotateLeft:   "\uf1da" // clock-rotate-left (history)
+    property string list:              "\uf03a" // list
 }
