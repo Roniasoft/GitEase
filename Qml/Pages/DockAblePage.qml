@@ -15,6 +15,7 @@ Item {
 
     /* Property Declarations
      * ****************************************************************************************/
+    property var page: null
     property var docks: []
 
     property var leftSideTabGroupDocks:   []

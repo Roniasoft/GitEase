@@ -17,7 +17,6 @@ DockAblePage {
     /* Property Declarations
      * ****************************************************************************************/
     // Provided by MainWindow Loader (current Page model)
-    property var page: null
 
     // Provided by MainWindow Loader (UiSession context)
     property AppModel appModel: null
