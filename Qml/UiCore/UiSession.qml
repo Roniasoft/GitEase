@@ -57,6 +57,10 @@ QtObject {
         repositoryController : root.repositoryController
     }
 
+    property LayoutController layoutController: LayoutController {
+        appModel: root.appModel
+    }
+
     property UiSessionPopups      popups
 }
 
