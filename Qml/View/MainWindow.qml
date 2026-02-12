@@ -41,6 +41,12 @@ Rectangle {
             Layout.preferredHeight: 30
             visible: root.uiSession?.appModel?.appSettings?.appearanceSettings?.designPagesLayout ?? false
             color: Qt.rgba(Style.colors.accent.r, Style.colors.accent.g, Style.colors.accent.b, 0.15)
+            
+            onVisibleChanged: {
+                if (visible && root.uiSession?.layoutController) {
+                    root.uiSession.layoutController.createBackup()
+                }
+            }
             Layout.leftMargin: 4
             Layout.topMargin: 1
             Layout.rightMargin: 4
@@ -100,6 +106,9 @@ Rectangle {
                         radius: 4
                     }
                     onClicked: {
+                        if (root.uiSession?.layoutController) {
+                            root.uiSession.layoutController.restoreFromBackup()
+                        }
                         root.uiSession.appModel.appSettings.appearanceSettings.designPagesLayout = false
                     }
                 }
@@ -130,7 +139,14 @@ Rectangle {
                         radius: 4
                     }
                     onClicked: {
-                        // Reset to default logic here
+                        // Set Default: reset all layouts to default configuration
+                        if (root.uiSession?.layoutController) {
+                            root.uiSession.layoutController.setDefaultLayouts()
+                            var currentIndex = root.uiSession.appModel.currentPage.pageIndex
+                            pageSwipeView.currentIndex = -1
+                            pageSwipeView.currentIndex = currentIndex
+                        }
+                        root.uiSession.appModel.appSettings.appearanceSettings.designPagesLayout = false
                     }
                 }
 
@@ -159,7 +175,10 @@ Rectangle {
                         radius: 4
                     }
                     onClicked: {
-                        // TODO Save Layout
+                        // Save: persist current layout configuration
+                        if (root.uiSession?.layoutController) {
+                            root.uiSession.layoutController.saveLayouts()
+                        }
                         root.uiSession.appModel.appSettings.appearanceSettings.designPagesLayout = false
                     }
                 }
@@ -256,6 +275,9 @@ Rectangle {
                                 }
                                 if (item.hasOwnProperty("bundleController")) {
                                     item.bundleController = Qt.binding(function() { return root.uiSession?.bundleController })
+                                }
+                                if (item.hasOwnProperty("layoutController")) {
+                                    item.layoutController = Qt.binding(function() { return root.uiSession?.layoutController })
                                 }
                                 if (item.hasOwnProperty("userAuthenticationPopup")) {
                                     item.userAuthenticationPopup = Qt.binding(function() { return root.uiSession?.popups?.userAuthenticationPopup })
