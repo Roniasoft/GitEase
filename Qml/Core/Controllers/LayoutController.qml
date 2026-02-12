@@ -3,8 +3,8 @@ import GitEase
 
 /*! ***********************************************************************************************
  * LayoutController
- * Singleton controller for managing application layouts including default and custom layouts.
- * Handles layout persistence (save/load/delete) for dock widget arrangements.
+ * Manages page dock layouts with persistence (save/load/restore).
+ * Tracks dock positions and TabGroupSide sizes for each page.
  * ************************************************************************************************/
 
 QtObject {
@@ -12,44 +12,179 @@ QtObject {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property var defaultLayouts: ({})
-    property var customLayouts: ({})
+    readonly property string filename: "layouts.json"
+    required property var appModel
+    
+    property var pageLayoutMap: ({})  // Maps pageId -> layout config
+    property var layoutBackup: null   // For cancel/restore operations
 
     /* Functions
      * ****************************************************************************************/
     /**
-     * Save a layout configuration with the given name
+     * Register/update layout for a page
      */
-    function saveLayout(name, layout) {
-        // TODO: Implementation
+    function registerPageLayout(pageId, leftDocks, topDocks, rightDocks, bottomDocks, 
+                                leftSize, topSize, rightSize, bottomSize) {
+        if (!pageId) {
+            console.warn("[LayoutController] Invalid pageId")
+            return
+        }
+        
+        pageLayoutMap[pageId] = {
+            left:{
+                dockTitles: getDockTitles(leftDocks),
+                preferredSize: leftSize || 300
+            },
+            top:{
+                dockTitles: getDockTitles(topDocks),
+                preferredSize: topSize || 180
+            },
+            right:{
+                dockTitles: getDockTitles(rightDocks),
+                preferredSize: rightSize || 300
+            },
+            bottom:{
+                dockTitles: getDockTitles(bottomDocks),
+                preferredSize: bottomSize || 180
+            }
+        }
+    }
+    
+    /**
+     * Retrieve layout for a page
+     */
+    function getPageLayout(pageId) {
+        return pageLayoutMap[pageId] || null
     }
 
     /**
-     * Load a layout configuration by name
+     * Save layouts to disk
      */
-    function loadLayout(name) {
-        // TODO: Implementation
-        return null
+    function saveLayouts() {
+        if (!root.appModel?.pages || !root.appModel?.fileIO) {
+            return false
+        }
+
+        try {
+            const layoutData = serializeAllLayouts()
+            const filePath = `${root.appModel.fileIO.configFilePath}/${root.filename}`
+            
+            root.appModel.fileIO.fileName = filePath
+            root.appModel.fileIO.fileContent = JSON.stringify(layoutData, null, 2)
+            root.appModel.fileIO.write()
+            
+            layoutBackup = null
+            return true
+        } catch (error) {
+            console.error("[LayoutController] Save failed:", error)
+            return false
+        }
     }
 
     /**
-     * Delete a custom layout
+     * Load layouts from disk
      */
-    function deleteLayout(name) {
-        // TODO: Implementation
+    function loadLayouts() {
+        if (!appModel?.fileIO) {
+            console.warn("[LayoutController] FileIO not available")
+            return false
+        }
+
+        try {
+            const filePath = `${appModel.fileIO.configFilePath}/${filename}`
+            
+            if (!appModel.fileIO.isFileExist(filePath)) {
+                console.log("[LayoutController] No saved layouts found")
+                return true
+            }
+
+            appModel.fileIO.fileName = filePath
+            appModel.fileIO.read()
+            
+            const content = appModel.fileIO.fileContent?.trim()
+            if (!content) {
+                console.warn("[LayoutController] Empty layouts file")
+                return true
+            }
+
+            const data = JSON.parse(content)
+            const layouts = data.layouts || []
+            
+            layouts.forEach(layout => {
+                if (layout.pageId && layout.tabGroups) {
+                    pageLayoutMap[layout.pageId] = layout.tabGroups
+                }
+            })
+
+            return true
+        } catch (error) {
+            console.error("[LayoutController] Load failed:", error)
+            return false
+        }
     }
 
     /**
-     * Get a default layout for a specific type
+     * Save current state as default
      */
-    function getDefaultLayout(type) {
-        // TODO: Implementation
-        return null
+    function setDefaultLayouts() {
+        return saveLayouts()
     }
 
-    Component.onCompleted: {
-        // TODO: Initialization
+    /**
+     * Create backup for restore
+     */
+    function createBackup() {
+        try {
+            layoutBackup = JSON.parse(JSON.stringify(pageLayoutMap))
+        } catch (error) {
+            console.error("[LayoutController] Backup failed:", error)
+        }
     }
+
+    /**
+     * Restore from backup
+     */
+    function restoreFromBackup() {
+        if (!layoutBackup) {
+            console.warn("[LayoutController] No backup available")
+            return false
+        }
+
+        try {
+            pageLayoutMap = JSON.parse(JSON.stringify(layoutBackup))
+            layoutBackup = null
+            return true
+        } catch (error) {
+            console.error("[LayoutController] Restore failed:", error)
+            return false
+        }
+    }
+
+    function getDockTitles(docks) {
+        if (!Array.isArray(docks)) return []
+        return docks.filter(d => d?.title).map(d => d.title)
+    }
+    
+    function serializeAllLayouts() {
+        const pages = appModel?.pages || []
+        const layouts = pages.map(page => ({
+            pageId: page.id || "",
+            pageTitle: page.title || "",
+            tabGroups: pageLayoutMap[page.id] || {
+                left:   { dockTitles: [], preferredSize: 300 },
+                top:    { dockTitles: [], preferredSize: 180 },
+                right:  { dockTitles: [], preferredSize: 300 },
+                bottom: { dockTitles: [], preferredSize: 180 }
+            }
+        }))
+        
+        return {
+            version: "1.0",
+            layouts: layouts
+        }
+    }
+
+    Component.onCompleted: loadLayouts()
 }
 
 
