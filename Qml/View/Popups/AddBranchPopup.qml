@@ -14,7 +14,8 @@ IPopup {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property BranchController branchController
+    property BranchController       branchController
+    property NotificationController notificationController: null
 
     readonly property bool    isNameValid: nameInput.text.trim().length > 0
 
@@ -104,7 +105,14 @@ IPopup {
                         let res = root.branchController.createBranch(nameInput.text)
 
                         if (res.success) {
+                            if (notificationController) {
+                                notificationController.success("Branch '" + nameInput.text + "' created successfully", "Branch", 3000)
+                            }
                             root.close();
+                        } else {
+                            if (notificationController) {
+                                notificationController.error(res.errorMessage || "Failed to create branch", "Branch Error", 5000)
+                            }
                         }
                     }
                 }
