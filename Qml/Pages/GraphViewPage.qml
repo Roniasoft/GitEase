@@ -495,6 +495,7 @@ Item {
                 branchController: root.branchController
                 commitController: root.commitController
                 statusController: root.statusController
+                notificationController: root.notificationController
 
                 onCommitClicked: function(commitId) {
                     root.selectedCommit = commitId
