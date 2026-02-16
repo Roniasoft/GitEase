@@ -28,6 +28,8 @@ Item {
     property StatusController statusController: null
 
     property RepositoryController repositoryController: null
+    
+    property NotificationController notificationController: null
 
     readonly property var currentRepo: appModel?.currentRepository ?? null
 
