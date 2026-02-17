@@ -108,6 +108,8 @@ GitRepository {
                 })
                 
                 // Add to repositories array
+                repo.cppObjectPtr = root.currentRepo
+                
                 appModel.repositories.push(repo)
                 appModel.repositories = appModel.repositories.slice(0)
             }
@@ -122,6 +124,18 @@ GitRepository {
     function selectRepository(repoId :string) {
         var repo = appModel.repositories.find(r => r.id === repoId)
         if (repo) {
+            if (repo.cppObjectPtr) {
+                root.currentRepo = repo.cppObjectPtr
+            } else {
+                var result = open(repo.path)
+                
+                if (!result.success) {
+                    return
+                }
+                
+                repo.cppObjectPtr = root.currentRepo
+            }
+            
             appModel.currentRepository = repo
             root.repositorySelected(repo)
 
