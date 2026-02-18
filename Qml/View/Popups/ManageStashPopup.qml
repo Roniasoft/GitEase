@@ -7,7 +7,7 @@ import GitEase_Style
 import GitEase_Style_Impl
 
 /*! ***********************************************************************************************
- * AddStashPopup
+ * ManageStashPopup
  * ************************************************************************************************/
 
 IPopup {
@@ -15,13 +15,14 @@ IPopup {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property StashController        stashController:        null
-    property NotificationController notificationController: null
-    property StatusController       statusController:       null
+    property StashController stashController: null
+    property StatusController statusController: null
+    property CommitController commitController: null
 
-    readonly property bool    isNameValid: true
-
-    readonly property bool    canAccept:   isNameValid
+    property var stashEntry: null
+    property var stashFiles: []
+    property var stashDiffData: []
+    property string selectedFilePath: ""
 
     /* Object Properties
      * ****************************************************************************************/
@@ -29,17 +30,34 @@ IPopup {
     height: 650
     padding: 12
 
-    property var stashFiles: []
-    property string selectedFilePath: ""
-    property var stashDiffData: []
+    readonly property bool canPerformAction: stashEntry !== null
 
-    onOpened: {
-        loadFiles()
+    onStashEntryChanged: {
+        if (!stashEntry || !statusController) {
+            stashFiles = []
+            stashDiffData = []
+            selectedFilePath = ""
+            return
+        }
+
+        // Load the list of files for this stash
+        let loadFiles = statusController.getCommitFileChanges(stashEntry.id)
+        if (loadFiles.success) {
+            stashFiles = loadFiles.data
+
+            // Automatically select the first file
+            if (stashFiles.length > 0) {
+                selectFile(stashFiles[0].path)
+            } else {
+                stashDiffData = []
+                selectedFilePath = ""
+            }
+        }
     }
+
 
     /* Children
      * ****************************************************************************************/
-
     contentItem: Rectangle {
         color: Style.colors.primaryBackground
         radius: 16
@@ -53,25 +71,15 @@ IPopup {
             anchors.margins: 20
 
             RowLayout{
-
-                CheckBox {
-                    id: keepIndexCheckBox
-                    Layout.fillWidth: false
-                    text: "Keep staged changes in index"
-                    checked: true
-
-                    font.family: Style.fontTypes.roboto
-                    font.pixelSize: 12
-
-                    Material.accent: Style.colors.accent
-
-                    palette {
-                        text: Style.colors.foreground
-                    }
-                }
-
-                Item {
+                Text {
                     Layout.fillWidth: true
+                    text: root.stashEntry
+                          ? ("stash@{" + root.stashEntry.index + "}  " + (root.stashEntry.message || "WIP"))
+                          : "Stash"
+                    color: Style.colors.foreground
+                    font.family: Style.fontTypes.roboto
+                    font.bold: true
+                    font.pixelSize: 16
                 }
 
                 // Close Button
@@ -102,7 +110,7 @@ IPopup {
                             rotation: -45
                         }
                     }
-                    onClicked: closePopUp()
+                    onClicked: root.close()
                 }
             }
 
@@ -110,42 +118,56 @@ IPopup {
                 Layout.fillWidth: true
                 spacing: 8
 
+                CheckBox {
+                    id: reinstateIndexCheck
+                    Layout.fillWidth: false
+                    text: "Restore Staged / Index State"
+                    checked: true
 
-                TextField {
-                    id: stashMessageField
-                    Layout.fillWidth: true
-                    placeholderText: "Stash Message (Optional)"
                     font.family: Style.fontTypes.roboto
                     font.pixelSize: 12
 
-                    background: Rectangle {
-                        radius: 4
-                        color: Style.colors.secondaryBackground
-                        border.width: parent.activeFocus ? 2 : 1
-                        border.color: parent.activeFocus ? Style.colors.accent : Style.colors.primaryBorder
+                    Material.accent: Style.colors.accent
+
+                    palette {
+                        text: Style.colors.foreground
                     }
                 }
 
+                Item {
+                    Layout.fillWidth: true
+                }
 
-                Button {
-                    flat: true
-                    text: "Create Stash"
-                    Layout.alignment: Qt.AlignRight
-                    Layout.preferredHeight: 50
-                    Material.foreground: hovered ? Style.colors.secondaryForeground : Style.colors.foreground
-                    background: Rectangle {
-                        color: parent.hovered ? Style.colors.accent : Style.colors.secondaryBackground
-                        border.color: Style.colors.accent
-                        radius: 5
-                    }
+                ActionIconButton {
+                    iconText: Style.icons.trash
+                    tooltip: "Drop"
+                    textColor: Style.colors.deletededFile
+
                     onClicked: {
-                        let message = stashMessageField.text.trim()
-                        let keepIndex = keepIndexCheckBox.checked
-                        let result = stashController.save(message, keepIndex)
-                        if (result.success) {
-                            closePopUp()
+                        root.executeAction("remove")
+                        root.close()
+                    }
+                }
 
-                        }
+                ActionIconButton {
+                    iconText: Style.icons.undo
+                    tooltip: "Pop"
+                    textColor: Style.colors.mutedText
+
+                    onClicked: {
+                        root.executeAction("pop")
+                        root.close()
+                    }
+                }
+
+                ActionIconButton {
+                    iconText: Style.icons.check
+                    tooltip: "Apply"
+                    textColor: Style.colors.mutedText
+
+                    onClicked: {
+                        root.executeAction("apply")
+                        root.close()
                     }
                 }
             }
@@ -165,17 +187,16 @@ IPopup {
                     spacing: 8
 
                     ListView {
-                        id: fileList
                         Layout.preferredWidth: 240
                         Layout.fillHeight: true
                         clip: true
-                        model: stashFiles
+                        model: root.stashFiles
 
                         delegate: Rectangle {
                             width: parent.width
                             height: 24
                             radius: 3
-                            color: (selectedFilePath === modelData.path) ? Style.colors.hoverTitle : "transparent"
+                            color: (root.selectedFilePath === modelData.path) ? Style.colors.hoverTitle : "transparent"
 
                             RowLayout {
                                 anchors.fill: parent
@@ -184,7 +205,7 @@ IPopup {
                                 spacing: 6
 
                                 Text {
-                                    text: statusLabel(modelData)
+                                    text: root.statusLabel(modelData.deltaStatus)
                                     color: Style.colors.mutedText
                                     font.pixelSize: 8
                                     Layout.preferredWidth: 14
@@ -204,13 +225,12 @@ IPopup {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: selectFile(modelData)
+                                onClicked: root.selectFile(modelData.path)
                             }
                         }
                     }
 
                     DiffView {
-                        id: diffView
                         Layout.fillWidth: true
                         Layout.fillHeight: true
                         readOnly: true
@@ -223,61 +243,62 @@ IPopup {
 
     /* Functions
      * ****************************************************************************************/
-
-    function loadFiles() {
-        stashFiles = []
-        stashDiffData = []
-        selectedFilePath = ""
-
-        if (!statusController)
-            return
-
-        let res = statusController.status()
-        if (!res.success)
-            return
-
-        let filtered = []
-        res.data.forEach((file) => {
-            if (file.isStaged || file.isUnstaged || file.isUntracked) {
-                filtered.push(file)
-            }
-        })
-        stashFiles = filtered
-
-        if (stashFiles.length > 0) {
-            selectFile(stashFiles[0])
-        }
+    function selectFile(filePath) {
+        root.selectedFilePath = filePath
+        root.loadDiffForFile()
     }
 
-    function selectFile(file) {
-        selectedFilePath = file.path
-        stashDiffData = []
-
-        if (!statusController || !selectedFilePath)
+    function loadDiffForFile() {
+        root.stashDiffData = []
+        if (!stashEntry || !selectedFilePath || !statusController)
             return
 
-        let res = statusController.getDiffView(selectedFilePath, !!file.isStaged)
+        const parentHash = stashEntry.parentId
+                           || (commitController ? commitController.getParentHash(stashEntry.id) : "")
 
+        if (!parentHash)
+            return
+
+        let res = statusController.getDiff(parentHash, stashEntry.id, selectedFilePath)
         if (res.success) {
-            stashDiffData = res.data.lines  // Use the lines for DiffView
+            root.stashDiffData = res.data
         }
     }
 
-    function closePopUp(){
-        stashMessageField.text = ""
-        keepIndexCheckBox.checked = false
-        selectedFilePath = ""
-        stashDiffData = []
-        stashFiles = []
-        root.close()
-    }
+    function executeAction(action) {
+        if (!stashEntry || !stashController)
+            return
 
+        let result = ({ success: false })
+        if (action === "apply") {
+            result = stashController.apply(stashEntry.index, reinstateIndexCheck.checked)
+        } else if (action === "pop") {
+            result = stashController.pop(stashEntry.index, reinstateIndexCheck.checked)
+        } else if (action === "remove") {
+            result = stashController.remove(stashEntry.index)
+        }
+
+        if (result.success) {
+            // optional: emit signal or callback to parent to refresh list
+        }
+    }
 
     function statusLabel(fileOrDelta) {
-        if (fileOrDelta.isStaged)
-            return "S"
-        if (fileOrDelta.isUntracked)
-            return "U"
-        return "M"
+        switch (fileOrDelta) {
+            case GitFileStatus.ADDED:
+                return "A"
+
+            case GitFileStatus.DELETED:
+                return "D"
+
+            case GitFileStatus.MODIFIED:
+                return "M"
+
+            case GitFileStatus.RENAMED:
+                return "R"
+
+            default:
+                return "?"
+        }
     }
 }
