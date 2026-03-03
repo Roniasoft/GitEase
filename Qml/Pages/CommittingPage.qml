@@ -37,7 +37,7 @@ Item {
     property UserAuthenticationPopup userAuthenticationPopup: null
 
     property bool                    isFetching:             false
-    property string                  authPurpose:            "push"  // "push" | "fetch"
+    property string                  authPurpose:            "push"  // "push" | "fetch" | "pushForce"
     property var                     pendingFetchRemoteNames: []    // HTTP/HTTPS remotes to fetch with token
 
     property string                  selectedFilePath:        ""
@@ -100,20 +100,23 @@ Item {
                 root.notificationController.error("Current branch name is invalid", "Branch Error", 5000)
                 errorMessageLabel.text = "current Branch Name invalid!"
             }else{
+                let isForce = root.authPurpose === "pushForce"
                let remoteRes = remoteController.push(
                     "origin",
                     branchName,
                     userProfileController.currentUserProfile.username,
-                    password)
+                    password,
+                    isForce)
 
                 if(!remoteRes.success){
-                    root.notificationController.error(remoteRes.errorMessage || "Push failed", "Push Error", 5000)
+                    root.notificationController.error(remoteRes.errorMessage || "Push failed", isForce ? "Push Force Error" : "Push Error", 5000)
                     errorMessageLabel.text = remoteRes.errorMessage ?? "push error"
                 }else{
-                    root.notificationController.success("Changes pushed successfully", "Push", 3000)
+                    root.notificationController.success(isForce ? "Changes force pushed successfully" : "Changes pushed successfully", isForce ? "Push Force" : "Push", 3000)
                     commitTextArea.text = ""
                 }
             }
+            root.authPurpose = "push"
 
             root.update()
         }
@@ -199,6 +202,44 @@ Item {
                                 id: commitOptionsMenu
                                 parent: commitPanel
                                 menuModel: [
+                                    {
+                                        text: "Push Force",
+                                        icon: Style.icons.arrowUp,
+                                        action: function() {
+                                            let res = remoteController.getRemoteUrl("origin")
+                                            if (!res.success) {
+                                                if (notificationController)
+                                                    notificationController.error(res.errorMessage || "Failed to get remote URL", "Push Force Error", 5000)
+                                                return
+                                            }
+                                            let url = res.data.url
+                                            let protocol = repositoryController.detectGitProtocol(url)
+                                            switch (protocol) {
+                                            case RepositoryController.GitProtocol.SSH: {
+                                                let branchName = branchController.getCurrentBranchName()
+                                                let remoteRes = remoteController.push("origin", branchName, true)
+                                                if (!remoteRes.success) {
+                                                    if (notificationController)
+                                                        notificationController.error(remoteRes.errorMessage || "Push force failed", "Push Force Error", 5000)
+                                                    errorMessageLabel.text = remoteRes.errorMessage ?? "push force error"
+                                                } else {
+                                                    if (notificationController)
+                                                        notificationController.success("Changes force pushed successfully", "Push Force", 3000)
+                                                }
+                                                break
+                                            }
+                                            case RepositoryController.GitProtocol.HTTPS:
+                                            case RepositoryController.GitProtocol.HTTP:
+                                                root.authPurpose = "pushForce"
+                                                userAuthenticationPopup.open()
+                                                break
+                                            default:
+                                                if (notificationController)
+                                                    notificationController.error("Unsupported protocol", "Push Force Error", 5000)
+                                            }
+                                            root.update()
+                                        }
+                                    },
                                     {
                                         text: "Fetch",
                                         icon: Style.icons.download,
