@@ -109,4 +109,14 @@ QtObject{
 
     property color notificationBadge:           "#ef4444"
     property color notificationBadgeText:       "#FFFFFF"
+
+
+    // Conflict marker backgrounds
+    property color conflictMarkerStartBg:   "#d4b89c"
+    property color conflictMarkerEndBg:     "#d4b89c"
+    property color conflictOursBg:          "#e6f4d9"
+    property color conflictTheirsBg:        "#d9e8f5"
+    property color conflictSeparatorBg:     "transparent"
+    property color conflictMarkerText:      "#666666"
+    property color lineNumberColor:         "#6e7681"
 }

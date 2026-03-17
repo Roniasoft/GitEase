@@ -113,6 +113,16 @@ QtObject {
         notificationSuccessText:     "#E8FFF0"
         notificationWarningText:     "#FFF3E0"
         notificationErrorText:       "#FFEBEE"
+
+        // Conflict marker backgrounds
+        conflictMarkerStartBg:  "#3d4b5a"
+        conflictMarkerEndBg:    "#3d4b5a"
+        conflictOursBg:         "#2d5a3a"
+        conflictTheirsBg:       "#1e4a6f"
+        conflictSeparatorBg:    "transparent"
+        conflictMarkerText:     "#a0a0a0"
+        hintText:               "#a0a0a0"
+        lineNumberColor:        "#a0a0a0"
     }
 
     property           string       currentTheme:               "Modern Light"
