@@ -21,6 +21,8 @@ Rectangle {
 
     property UserProfileController userProfileController
 
+    property WindowController      windowController
+
     property AppModel              appModel
 
     property int                   contentMargins:  24
@@ -44,6 +46,7 @@ Rectangle {
         // Shared PageHeader for all steps
         PageHeader {
             id: pageHeader
+            welcomeController: root.welcomeController
             pageTitle: {
                 switch(root.controller ? root.controller.currentPageIndex : Enums.WelcomePages.WelcomeBanner) {
                     case Enums.WelcomePages.WelcomeBanner: return ""

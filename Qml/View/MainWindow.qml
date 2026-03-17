@@ -16,6 +16,9 @@ Rectangle {
      * ****************************************************************************************/
     property UiSession uiSession: null
 
+    property WindowController      windowController
+
+
     /* Object Properties
      * ****************************************************************************************/
     color: Style.colors.primaryBackground
@@ -32,7 +35,7 @@ Rectangle {
             Layout.minimumHeight: 50
             Layout.maximumHeight: 50
             Layout.fillWidth: true
-
+            windowController: root.windowController
             content: (pageLoader.item && pageLoader.item.hasOwnProperty("headerContent")) ? pageLoader.item.headerContent : null
         }
 

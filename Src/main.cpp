@@ -34,9 +34,5 @@ int main(int argc, char *argv[])
 
     win->setIcon(app.windowIcon());
 
-    auto controller = WindowController(win, &app);
-    engine.rootContext()->setContextProperty(QStringLiteral("WindowController"), &controller);
-    win->show();
-
     return app.exec();
 }

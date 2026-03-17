@@ -69,6 +69,7 @@ set(INCLUDE_DIRS_BACKEND
     ${CMAKE_SOURCE_DIR}/Src/Utilities/FileManager/
     ${CMAKE_SOURCE_DIR}/Src/Utilities/
     ${CMAKE_SOURCE_DIR}/Src/Utilities/SshKeyManager/
+    ${CMAKE_SOURCE_DIR}/Src/Utilities/windowsManager/
     ${CMAKE_SOURCE_DIR}/Src
     ${CMAKE_SOURCE_DIR}/Src/Git/
 )

@@ -28,6 +28,10 @@ Item {
     readonly property var           currentRepo: appModel?.currentRepository ?? null
     property string                 selectedCommit: ""
     property string                 selectedFilePath: ""
+    readonly property bool          commitGraphDetached: commitGraphPanel?.detached ?? false
+    readonly property bool          fileChangesDetached: fileChangesPanel?.detached ?? false
+    readonly property bool          diffDetached: diffPanel?.detached ?? false
+    readonly property bool          bottomDetached: fileChangesDetached && diffDetached
 
     /* Object Properties
      * ****************************************************************************************/
@@ -493,12 +497,15 @@ Item {
         anchors.fill: parent
         spacing: 0
 
-        Rectangle {
-            id: commitGraphDock
+        DetachablePanel {
+            id: commitGraphPanel
+            title: "Commit Graph"
             Layout.fillWidth: true
-            Layout.minimumHeight: root.height / 2
-            Layout.maximumHeight: root.height / 2
-            color: "transparent"
+            Layout.fillHeight: !commitGraphDetached
+            Layout.preferredHeight: commitGraphDetached ? 0 : (bottomDetached ? root.height : root.height / 2)
+            Layout.minimumHeight: commitGraphDetached ? 0 : (bottomDetached ? root.height : root.height / 2)
+            Layout.maximumHeight: commitGraphDetached ? 0 : (bottomDetached ? root.height : root.height / 2)
+            visible: !commitGraphDetached
 
             CommitGraphDock {
                 id: commitGraph
@@ -518,11 +525,14 @@ Item {
             }
         }
 
-        Rectangle {
+        Item {
+            id: bottomArea
             Layout.fillWidth: true
-            Layout.minimumHeight: root.height / 2
-            Layout.maximumHeight: root.height / 2
-            color: "transparent"
+            Layout.fillHeight: !bottomDetached
+            Layout.preferredHeight: bottomDetached ? 0 : (commitGraphDetached ? root.height : root.height / 2)
+            Layout.minimumHeight: bottomDetached ? 0 : (commitGraphDetached ? root.height : root.height / 2)
+            Layout.maximumHeight: bottomDetached ? 0 : (commitGraphDetached ? root.height : root.height / 2)
+            visible: !bottomDetached
 
             RowLayout {
                 anchors.fill: parent
@@ -530,10 +540,13 @@ Item {
                 anchors.topMargin: 32
                 spacing: 12
 
-                Rectangle {
-                    Layout.preferredWidth: root.width / 2
-                    Layout.fillHeight: true
-                    color: "transparent"
+                DetachablePanel {
+                    id: fileChangesPanel
+                    title: "File Changes"
+                    Layout.preferredWidth: fileChangesDetached ? 0 : (diffDetached ? root.width : root.width / 2)
+                    Layout.fillWidth: !fileChangesDetached
+                    Layout.fillHeight: !fileChangesDetached
+                    visible: !fileChangesDetached
 
                     FileChangesDock {
                         id: fileChangesDock
@@ -562,10 +575,13 @@ Item {
                     }
                 }
 
-                Rectangle {
-                    Layout.preferredWidth: root.width / 2
-                    Layout.fillHeight: true
-                    color: "transparent"
+                DetachablePanel {
+                    id: diffPanel
+                    title: "Diff View"
+                    Layout.preferredWidth: diffDetached ? 0 : (fileChangesDetached ? root.width : root.width / 2)
+                    Layout.fillWidth: !diffDetached
+                    Layout.fillHeight: !diffDetached
+                    visible: !diffDetached
 
                     DiffView {
                         id: diffView

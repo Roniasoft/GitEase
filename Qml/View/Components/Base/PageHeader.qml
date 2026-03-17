@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
+import GitEase
 import GitEase_Style
 import GitEase_Style_Impl
 
@@ -14,6 +15,8 @@ Item {
 
     /* Property Declarations
      * ****************************************************************************************/
+    property WelcomeController     welcomeController
+
     property string pageTitle: ""
     property bool showBackButton: true
     property bool showBrand: true
@@ -85,8 +88,8 @@ Item {
         id: dragArea
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton
-        onPressed: WindowController.startSystemMove()
-        onDoubleClicked: WindowController.toggleMaxRestore()
+        onPressed: welcomeController.startSystemMove()
+        onDoubleClicked: welcomeController.toggleMaxRestore()
     }
 }
 

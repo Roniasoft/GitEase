@@ -11,6 +11,8 @@ import GitEase
  * ************************************************************************************************/
 Rectangle {
     color: Style.colors.primaryBackground
+
+    property WindowController windowController
     
     RowLayout {
         anchors.centerIn: parent
@@ -19,7 +21,7 @@ Rectangle {
         // Minimize Button
         WindowsButton {
             id: minimizeButton
-            onClicked: WindowController.minimize()
+            onClicked: windowController ? windowController.minimize() : undefined
             Material.accent: Style.colors.windowsMinimize
             content: Rectangle {
                 anchors.centerIn: parent
@@ -33,7 +35,7 @@ Rectangle {
         // Maximize/Restore Button
         WindowsButton {
             id: maximizeButton
-            onClicked: WindowController.toggleMaxRestore()
+            onClicked: windowController ? windowController.toggleMaxRestore() : undefined
             Material.accent: Style.colors.windowsMaximize
             content: Rectangle {
                 anchors.centerIn: parent
@@ -49,7 +51,7 @@ Rectangle {
         // Close Button
         WindowsButton {
             id: closeButton
-            onClicked: WindowController.closeWindow()
+            onClicked: windowController ? windowController.closeWindow() : undefined
             Material.accent: Style.colors.windowsClose
             content: Item {
                 anchors.centerIn: parent
