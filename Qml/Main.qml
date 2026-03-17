@@ -37,6 +37,11 @@ ApplicationWindow {
         uiSession?.notificationController?.saveNotifications()
     }
 
+    WindowController {
+        id: windowController
+        window: window
+    }
+
 
     /* Fonts
      * ****************************************************************************************/
@@ -108,6 +113,9 @@ ApplicationWindow {
                     if (item && item.hasOwnProperty("appModel")) {
                         item.appModel = Qt.binding(function() {return uiSession.appModel})
                     }
+                    if (item && item.hasOwnProperty("windowController")) {
+                        item.windowController = Qt.binding(function() {return windowController})
+                    }
                 }
             }
         }
@@ -127,6 +135,9 @@ ApplicationWindow {
                 onLoaded: {
                     if (item && item.hasOwnProperty("uiSession")) {
                         item.uiSession = uiSession
+                    }
+                    if (item && item.hasOwnProperty("windowController")) {
+                        item.windowController = Qt.binding(function() {return windowController})
                     }
                 }
             }

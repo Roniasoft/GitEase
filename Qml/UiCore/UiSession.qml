@@ -2,7 +2,6 @@ import QtQuick
 
 import GitEase
 
-import "../Core/Controllers"
 /*! ***********************************************************************************************
  * UiSession
  * Main UI session manager that coordinates application controllers and models
