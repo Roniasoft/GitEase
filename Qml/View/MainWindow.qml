@@ -152,6 +152,9 @@ Rectangle {
                         if (item.hasOwnProperty("mergeController")) {
                             item.mergeController = Qt.binding(function() { return root.uiSession?.mergeController })
                         }
+                        if (item.hasOwnProperty("rebaseController")) {
+                            item.rebaseController = Qt.binding(function() { return root.uiSession?.rebaseController })
+                        }
                         if (item.hasOwnProperty("conflictController")) {
                             item.conflictController = Qt.binding(function() { return root.uiSession?.conflictController })
                         }
