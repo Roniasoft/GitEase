@@ -46,6 +46,10 @@ Item {
         notificationController: root.notificationController
     }
 
+    property RebaseConflictPopup         rebaseConflictPopup:        RebaseConflictPopup {
+        notificationController: root.notificationController
+    }
+
     property NotificationCenterPopup    notificationCenterPopup:    NotificationCenterPopup {}
 
     property ManageStashPopup           manageStashPopup:           ManageStashPopup {}
