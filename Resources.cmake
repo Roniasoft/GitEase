@@ -152,8 +152,7 @@ set(RESOURCES_POPUPS
     Qml/View/Popups/NotificationCenterPopup.qml
     Qml/View/Popups/ManageStashPopup.qml
     Qml/View/Popups/FetchSummaryPopup.qml
-    Qml/View/Popups/MergeConflictPopup.qml
-    Qml/View/Popups/RebaseConflictPopup.qml
+    Qml/View/Popups/ConflictPopup.qml
 
 )
 
