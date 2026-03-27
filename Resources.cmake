@@ -89,6 +89,7 @@ set(RESOURCES_COMPONENTS
     Qml/View/Components/Docks/RecentActivityDock.qml
 
     Qml/View/Components/Docks/RecentActivityDock.qml
+    Qml/View/Components/Docks/RebaseDock.qml
 
     # File list components (commit UI)
     Qml/View/Components/FileLists/UnstagedFileListSection.qml  # Unstaged File Status Section
