@@ -7,7 +7,7 @@ import GitEase_Style
 import GitEase_Style_Impl
 
 /*! ***********************************************************************************************
- * MergeConflictPopup
+ * RebaseConflictPopup
  * ************************************************************************************************/
 
 IPopup {
@@ -15,7 +15,7 @@ IPopup {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property MergeController mergeController: null
+    property RebaseController rebaseController: null
     property ConflictController conflictController: null
     property NotificationController notificationController: null
     property StatusController statusController: null
@@ -25,7 +25,7 @@ IPopup {
     property string selectedPath: ""
 
 
-    readonly property bool canContinueMerge: mergeController && conflicts.length === 0
+    readonly property bool canContinueRebase: rebaseController && conflicts.length === 0
 
     /* Object Properties
      * ****************************************************************************************/
@@ -67,7 +67,7 @@ IPopup {
 
                 Text {
                     Layout.fillWidth: true
-                    text: "Merge Conflicts"
+                    text: "Rebase Conflicts"
                     color: Style.colors.secondaryText
                     font.family: Style.fontTypes.roboto
                     font.bold: true
@@ -334,8 +334,8 @@ IPopup {
 
                 Button {
                     flat: true
-                    text: "Continue Merge"
-                    enabled: canContinueMerge
+                    text: "Continue Rebase"
+                    enabled: canContinueRebase
                     Material.foreground: hovered ? Style.colors.secondaryForeground : Style.colors.foreground
                     background: Rectangle {
                         color: parent.hovered ? Style.colors.accent : Style.colors.secondaryBackground
@@ -343,7 +343,7 @@ IPopup {
                         radius: 5
                     }
 
-                    onClicked: continueMerge()
+                    onClicked: continueRebase()
                 }
             }
         }
@@ -656,19 +656,19 @@ IPopup {
         }
     }
 
-    function continueMerge() {
-        if (!mergeController)
+    function continueRebase() {
+        if (!rebaseController)
             return
 
-        let res = mergeController.continueMerge()
+        let res = rebaseController.continueRebase()
         if (res.success) {
             if (notificationController)
-                notificationController.success("merge was completed", "Conflict", 2500)
+                notificationController.success("rebase was completed", "Conflict", 2500)
             close()
         }
         else {
             if (notificationController)
-                notificationController.error(res.errorMessage, "Merge", 4000)
+                notificationController.error(res.errorMessage, "Rebase", 4000)
         }
     }
 
