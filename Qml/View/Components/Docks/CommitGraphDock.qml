@@ -582,6 +582,9 @@ Item {
         function onBranchCreatedSuccessfully() {
             root.selectedCommit = ""
             root.reloadAll()
+
+            root.selectedCommitHashes = []
+            root.lastSelectedIndex = -1
         }
     }
 
