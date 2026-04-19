@@ -581,10 +581,9 @@ Item {
 
         function onBranchCreatedSuccessfully() {
             root.selectedCommit = ""
-            root.reloadAll()
-
             root.selectedCommitHashes = []
             root.lastSelectedIndex = -1
+            root.reloadAll()
         }
     }
 
@@ -1893,6 +1892,8 @@ Item {
                                     root.notificationController.error(res.errorMessage || "Failed to checkout", "Checkout Error", 5000);
                                 }
                                 root.selectedCommit = "";
+                                root.selectedCommitHashes = []
+                                root.lastSelectedIndex = -1
                                 root.reloadAll();
                             }
                         }
