@@ -170,6 +170,7 @@ set(RESOURCES_POPUPS
     Qml/View/Popups/RebaseConflictPopup.qml
     Qml/View/Popups/ConflictPopup.qml
     Qml/View/Popups/MergeMethodPopup.qml
+    Qml/View/Popups/CommitAmendPopup.qml
 
     Qml/View/Popups/AddTagPopup.qml
 )

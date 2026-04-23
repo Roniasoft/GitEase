@@ -170,6 +170,9 @@ Rectangle {
                         if (item.hasOwnProperty("conflictController")) {
                             item.conflictController = Qt.binding(function() { return root.uiSession?.conflictController })
                         }
+                        if (item.hasOwnProperty("commitAmendPopup")) {
+                            item.commitAmendPopup = Qt.binding(function() { return root.uiSession?.popups?.commitAmendPopup })
+                        }
                     }
 
                     onStatusChanged: {

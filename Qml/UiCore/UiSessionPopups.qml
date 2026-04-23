@@ -60,4 +60,7 @@ Item {
     property FetchSummaryPopup          fetchSummaryPopup:          FetchSummaryPopup {}
 
     property RepoForestPopup            repoForestPopup:            RepoForestPopup {}
+
+    property CommitAmendPopup commitAmendPopup: CommitAmendPopup{}
+
 }
