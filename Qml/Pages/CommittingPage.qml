@@ -38,6 +38,8 @@ Item {
     
     property UiSessionPopups         uiSessionPopups:         null
 
+    property CommitAmendPopup commitAmendPopup:               null
+
     property bool                    isFetching:             false
     property var                     activeFetchRemotes:     []
     property string                  authPurpose:            "push"  // "push" | "fetch"
@@ -519,6 +521,14 @@ Item {
 
             root.update()
         }
+    }
+
+    CommitAmendPopup {
+        id: amendPopup
+        anchors.centerIn: parent
+
+        commitController        : root.commitController
+        notificationController  : root.notificationController
     }
 
     Connections {
@@ -1005,15 +1015,7 @@ Item {
                                             text: "Commit Amend",
                                             icon: Style.icons.penToSquare,
                                             action: function() {
-                                                let res = commitController.commit(commitTextArea.text, true, false)
-                                                if (res.success) {
-                                                    commitTextArea.text = ""
-                                                    root.notificationController.success("Commit amended successfully", "Commit Amend", 3000)
-                                                } else {
-                                                    root.notificationController.error(res.errorMessage || "Amend failed", "Commit Amend Error", 5000)
-                                                    errorMessageLabel.text = res.errorMessage ?? "amend error"
-                                                }
-                                                root.update()
+                                                amendPopup.open();
                                             }
                                         },
                                         {
