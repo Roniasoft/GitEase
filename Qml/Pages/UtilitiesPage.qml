@@ -116,7 +116,7 @@ Item {
                 notificationController  : root.notificationController
 
                 conflictPopup: ConflictPopup {
-                    isMerge: false
+                    currentOperation: ConflictPopup.OperationType.Rebase
 
                     rebaseController        : root.rebaseController
                     conflictController      : root.conflictController
