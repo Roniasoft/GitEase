@@ -99,8 +99,8 @@ Item {
                     height: parent.height
                     text: (leftLineNum > 0) ? leftLineNum : ""
                     color: Style.colors.linePanelForeground
-                    font.family: "Cascadia Mono"
                     font.pixelSize: 12
+                    font.family: Style.fontTypes.roboto
                     horizontalAlignment: Text.AlignRight
                     rightPadding: 10
                     topPadding: 4
@@ -120,8 +120,8 @@ Item {
                         x: -delegateRoot.horizontalOffset
                         text: leftContent
                         color: Style.colors.editorForeground
-                        font.family: "Cascadia Mono"
-                        font.pixelSize: 13
+                        font.family: Style.fontTypes.roboto
+                        font.pixelSize: 11
                         topPadding: 2
                         leftPadding: 8
                         TextMetrics { id: leftTextMetrics; text: leftDisplay.text; font: leftDisplay.font;}
@@ -237,8 +237,8 @@ Item {
                     z: 2
                     text: (rightLineNum > 0) ? rightLineNum : ""
                     color: Style.colors.linePanelForeground
-                    font.family: "Cascadia Mono"
                     font.pixelSize: 12
+                    font.family: Style.fontTypes.roboto
                     horizontalAlignment: Text.AlignRight
                     rightPadding: 10
                     topPadding: 4
@@ -258,8 +258,8 @@ Item {
                         width: 2000
                         text: rightContent
                         color: Style.colors.editorForeground
-                        font.family: "Cascadia Mono"
-                        font.pixelSize: 13
+                        font.family: Style.fontTypes.roboto
+                        font.pixelSize: 11
                         padding: 0
                         leftPadding: 8
                         topPadding: 2
