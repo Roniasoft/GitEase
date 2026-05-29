@@ -1,0 +1,10 @@
+{
+  "id": "gitease.qml-diff",
+  "name": "QML Diff Highlighter",
+  "version": "1.0.0",
+  "apiVersion": "1",
+  "capabilities": ["diff"],
+  "author": "GitEase",
+  "description": "Syntax-highlighted diff view for .qml files.",
+  "cppEntry": "lib/qml-diff-plugin"
+}
