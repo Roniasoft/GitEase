@@ -147,6 +147,11 @@ Item {
                 conflictController      : root.conflictController
             }
 
+            RepoReadmeViewerDock {
+                width: 330
+                height: 390
+            }
+
             // ── Plugin docks ─────────────────────────────────────────────────
             Repeater {
                 model: root.pluginController?.pluginManager?.registeredDocks ?? []
