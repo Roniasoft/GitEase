@@ -3,6 +3,7 @@ set(SOURCES_BACKEND
     Src/Utilities/windowsManager/borderlesswindowhelper.cpp
     Src/Utilities/windowsManager/TaskbarHelper.cpp
     Src/Utilities/FileManager/FileIO.cpp
+    Src/Utilities/FileManager/FileContentWatcher.cpp
     Src/Utilities/GitScanner/GitScanner.cpp
 
     Src/Git/IGitController.cpp
@@ -44,6 +45,7 @@ set(HEADERS_BACKEND
     Src/Utilities/windowsManager/TaskbarHelper.hpp
     Src/Utilities/windowsManager/borderlesswindowhelper.h
     Src/Utilities/FileManager/FileIO.hpp
+    Src/Utilities/FileManager/FileContentWatcher.h
     Src/Utilities/GitScanner/GitScanner.hpp
 
     Src/Git/IGitController.h

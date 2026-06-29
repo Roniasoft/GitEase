@@ -1,10 +1,9 @@
-#ifndef FILECONTENTWATCHER_H
-#define FILECONTENTWATCHER_H
 #pragma once
 
 #include <QObject>
-#include <QQmlEngine>
-#include <QUrl>
+#include <QtQml/qqmlregistration.h>#include <QUrl>
+#include <QDir>
+#include <QDirIterator>
 #include <QFileSystemWatcher>
 
 class FileContentWatcher : public QObject
@@ -27,6 +26,7 @@ public:
     void setFilePath(const QString &filePath);
 
     Q_INVOKABLE void reload();
+    Q_INVOKABLE QStringList findFiles(const QStringList &nameFilters, bool recursive = true) const;
 
 signals:
     void filePathChanged();
@@ -39,9 +39,8 @@ private:
 
     QFileSystemWatcher m_watcher;
     QString m_filePath;
+    QDir m_absoluteDir;
     QString m_content;
     QString m_error;
     bool m_exists = false;
 };
-
-#endif // FILECONTENTWATCHER_H
