@@ -24,6 +24,7 @@ UtilitiesCard {
     property UserAuthenticationPopup userAuthenticationPopup: null
     property var                  pluginManager:        null
     property string               pluginId:             "com.gitease.repo-forest"
+    property GuideController      guideController:      null
 
     /* Object Properties
      * ****************************************************************************************/
@@ -36,6 +37,24 @@ UtilitiesCard {
         id: content
         anchors.fill: parent
         spacing: 8
+
+        GuideHoverTrigger {
+            guideController: root.guideController
+            guideId: "repo_forest_tutorial"
+            guideName: "Repo Forest"
+            guideIcon: Style.icons.tree
+            guidePage: "utilities"
+            stepsFactory: function() {
+                return [
+                    {
+                        targetProvider: function() { return actionBtn },
+                        icon: Style.icons.folder,
+                        title: "Browse a Root Folder",
+                        description: "Pick a parent directory and GitEase discovers every git repository inside it, so you can fetch or pull across all of them at once."
+                    }
+                ]
+            }
+        }
 
         Rectangle {
             Layout.fillWidth: true
@@ -161,6 +180,7 @@ UtilitiesCard {
             remoteController: root.remoteController
             userAuthenticationPopup: root.userAuthenticationPopup
             rootPath: repoForestPopup.rootPath
+            guideController: root.guideController
             gitScanner: repoForestPopup.gitScanner
 
             onCloseRequested: repoForestPopup.close()
