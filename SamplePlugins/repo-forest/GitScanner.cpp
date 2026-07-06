@@ -1,22 +1,22 @@
-#include "GitScanner.hpp"
+#include "GitScanner.h"
 
 #include <QDir>
-#include <QFile>
-#include <QProcess>
-#include <QTextStream>
-#include <QDateTime>
-#include <QStandardPaths>
+#include <QFileInfo>
+#include <QFuture>
+#include <QList>
+#include <QMutex>
+#include <QMutexLocker>
+#include <QQueue>
+#include <QStringList>
+#include <QThread>
 #include <QtConcurrent>
-#include <QDirIterator>
-#include <atomic>
 
-GitScanner::GitScanner(QObject *parent)
+GitScanner::GitScanner(QObject* parent)
     : QObject(parent)
     , m_stopRequested(false)
     , m_busy(false)
 {
     connect(&m_watcher, &QFutureWatcher<QStringList>::finished, this, [this]() {
-
         if (m_busy.load()) {
             m_busy.store(false);
             emit busyChanged();
@@ -30,11 +30,13 @@ GitScanner::GitScanner(QObject *parent)
     });
 }
 
-bool GitScanner::busy() const {
+bool GitScanner::busy() const
+{
     return m_busy.load();
 }
 
-void GitScanner::scan(const QString &rootPath) {
+void GitScanner::scan(const QString& rootPath)
+{
     if (m_watcher.isRunning())
         return;
 
@@ -48,7 +50,6 @@ void GitScanner::scan(const QString &rootPath) {
     emit scanStarted();
 
     auto future = QtConcurrent::run([this, rootPath]() {
-
         QStringList repos;
 
         QQueue<QString> queue;
@@ -56,16 +57,12 @@ void GitScanner::scan(const QString &rootPath) {
 
         queue.enqueue(rootPath);
 
-        int workers = QThread::idealThreadCount();
-
+        const int workers = QThread::idealThreadCount();
         QList<QFuture<void>> tasks;
 
         for (int i = 0; i < workers; ++i) {
-
             tasks.append(QtConcurrent::run([&, this]() {
-
                 while (!m_stopRequested) {
-
                     QString dirPath;
                     {
                         QMutexLocker lock(&mutex);
@@ -84,9 +81,9 @@ void GitScanner::scan(const QString &rootPath) {
                         emit pathFound(dirPath);
                     }
 
-                    QFileInfoList subdirs = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
+                    const QFileInfoList subdirs = dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-                    for (const QFileInfo &info : std::as_const(subdirs)) {
+                    for (const QFileInfo& info : subdirs) {
                         QMutexLocker lock(&mutex);
                         queue.enqueue(info.absoluteFilePath());
                     }
@@ -94,8 +91,8 @@ void GitScanner::scan(const QString &rootPath) {
             }));
         }
 
-        for (auto &t : tasks)
-            t.waitForFinished();
+        for (auto& task : tasks)
+            task.waitForFinished();
 
         return repos;
     });
@@ -103,7 +100,8 @@ void GitScanner::scan(const QString &rootPath) {
     m_watcher.setFuture(future);
 }
 
-void GitScanner::stop() {
+void GitScanner::stop()
+{
     if (!m_watcher.isRunning())
         return;
 

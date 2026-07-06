@@ -6,6 +6,7 @@ import Qt.labs.folderlistmodel
 import GitEase
 import GitEase_Style
 import GitEase_Style_Impl
+import GitEaseRepoForest
 
 /*! ***********************************************************************************************
  * RepoForest
@@ -100,6 +101,8 @@ Rectangle {
     property string _currentOperation: ""
     property var    _patWaitingIndexs: []
     property bool   _showUserAuthenticationPopup: false
+    property real   _savedScrollY: 0
+    property bool   _suppressScrollReset: false
 
     on_ShowUserAuthenticationPopupChanged: {
         if (root._showUserAuthenticationPopup && root.pat === "") {
@@ -153,8 +156,11 @@ Rectangle {
 
     function updateStatus(itemIndex: int, status: string) {
         root.reposModel[itemIndex].status = status
-
+        if (!autoScrollingCheckBox.checked)
+            root._suppressScrollReset = true
         root.reposModel = root.reposModel.slice()
+        if (!autoScrollingCheckBox.checked)
+            Qt.callLater(() => { root._suppressScrollReset = false })
     }
 
     function logOperation(repoName, remoteName, operation, status, message) {
@@ -500,7 +506,11 @@ Rectangle {
             let idx = root.fetchFlowItemIndex
 
             root.reposModel[idx].progress = progress
+            if (!autoScrollingCheckBox.checked)
+                root._suppressScrollReset = true
             root.reposModel = root.reposModel.slice()
+            if (!autoScrollingCheckBox.checked)
+                Qt.callLater(() => { root._suppressScrollReset = false })
         }
     }
 
@@ -648,6 +658,11 @@ Rectangle {
 
                 palette {
                     text: Style.colors.foreground
+                }
+
+                onCheckStateChanged: {
+                    if (!autoScrollingCheckBox.checked)
+                        root._savedScrollY = repoListView.contentY
                 }
             }
 
@@ -1052,6 +1067,16 @@ Rectangle {
                 onClicked: (i) => root.toggleSelection(i)
                 onFetchRequested: (i) => root.fetch(i)
                 onPullRequested: (i) => root.pull(i)
+            }
+
+            onContentYChanged: {
+                if (root._suppressScrollReset)
+                    contentY = root._savedScrollY
+            }
+
+            onMovementEnded: {
+                if (!autoScrollingCheckBox.checked)
+                    root._savedScrollY = contentY
             }
 
             onCountChanged: {

@@ -1,28 +1,27 @@
 #pragma once
 
 #include <QObject>
-#include <QQmlEngine>
 #include <QFutureWatcher>
+#include <atomic>
 
 class GitScanner : public QObject
 {
     Q_OBJECT
-    QML_ELEMENT
 
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
 
 public:
-    explicit GitScanner(QObject *parent = nullptr);
+    explicit GitScanner(QObject* parent = nullptr);
 
-    Q_INVOKABLE void scan(const QString &rootPath);
+    Q_INVOKABLE void scan(const QString& rootPath);
     Q_INVOKABLE void stop();
 
     bool busy() const;
 
 signals:
-    void pathFound(const QString &path);
+    void pathFound(const QString& path);
     void scanStarted();
-    void scanFinished(const QStringList &repos);
+    void scanFinished(const QStringList& repos);
     void scanStopped();
     void busyChanged();
 

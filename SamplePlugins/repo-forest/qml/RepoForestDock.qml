@@ -6,6 +6,8 @@ import QtQuick.Dialogs
 import GitEase_Style_Impl
 import GitEase_Style
 import GitEase
+import GitEaseRepoForest
+import "qrc:/GitEase/Qml/View/Popups"
 
 /*! ***********************************************************************************************
  * RepoForestDock
@@ -19,7 +21,9 @@ UtilitiesCard {
     property RepositoryController repositoryController: null
     property BranchController     branchController:     null
     property RemoteController     remoteController:     null
-    property RepoForestPopup      repoForestPopup:      null
+    property UserAuthenticationPopup userAuthenticationPopup: null
+    property var                  pluginManager:        null
+    property string               pluginId:             "com.gitease.repo-forest"
 
     /* Object Properties
      * ****************************************************************************************/
@@ -133,13 +137,47 @@ UtilitiesCard {
                     var folderPath = selectedFolder.toString()
                     let path = root.repositoryController.appModel.fileIO.pathNormalizer(folderPath);
 
-                    repoForestPopup.repositoryController = root.repositoryController
-                    repoForestPopup.branchController = root.branchController
-                    repoForestPopup.remoteController = root.remoteController
                     repoForestPopup.rootPath = path
                     repoForestPopup.open()
                 }
             }
+        }
+    }
+
+    IPopup {
+        id: repoForestPopup
+
+        property string rootPath
+        property GitScanner gitScanner: GitScanner {}
+
+        width: 800
+        height: 650
+        padding: 12
+
+        contentItem: RepoForest {
+            id: repoForest
+            repositoryController: root.repositoryController
+            branchController: root.branchController
+            remoteController: root.remoteController
+            userAuthenticationPopup: root.userAuthenticationPopup
+            rootPath: repoForestPopup.rootPath
+            gitScanner: repoForestPopup.gitScanner
+
+            onCloseRequested: repoForestPopup.close()
+        }
+
+        onAboutToHide: resetRepoForest()
+        onClosed: resetRepoForest()
+
+        function resetRepoForest() {
+            repoForest.reposModel = []
+            repoForest.pat = ""
+            repoForest.pendingOperation = ""
+            repoForest.selectedIndexes = []
+            repoForest.isRunning = false
+            repoForest.operationQueue = []
+            repoForest.queueState = RepoForest.QueueState.Ready
+            repoForestPopup.gitScanner.stop()
         }
     }
 
