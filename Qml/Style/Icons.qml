@@ -87,4 +87,6 @@ QtObject{
     property string update:            "\uf2f1" // update
     property string compatible:        "\uf058" // compatible
     property string incompatible:      "\uf057" // incompatible
+
+    property string rules:             "\uf0ae" // rules
 }
