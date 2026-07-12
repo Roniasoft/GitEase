@@ -218,6 +218,7 @@ set(RESOURCES_POPUPS
     Qml/View/Popups/CommitPlanPopup.qml
 
     Qml/View/Popups/AddRulePopup.qml
+    Qml/View/Popups/RuleImportPopup.qml
 )
 
 
