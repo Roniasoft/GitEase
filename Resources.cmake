@@ -42,6 +42,7 @@ set(RESOURCES_CORE
     Qml/Core/Controllers/NetworkController.qml      # Network Controller
     Qml/Core/Controllers/UpdateController.qml       # Application Update Controller
     Qml/Core/Controllers/TerminalController.qml
+    Qml/Core/Controllers/RuleController.qml
 
     # Scripts
     Qml/Core/Scripts/GraphUtils.js
