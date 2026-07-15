@@ -100,7 +100,7 @@ Rectangle {
                     settingsPopup.updateController = root.uiSession.updateController
                     settingsPopup.fileIO = root.uiSession.appModel.fileIO
                     settingsPopup.guideController = root.uiSession.guideController
-                    settingsPopup.pageController = root.uiSession.pageController
+                    settingsPopup.switchToPageById = root.switchToPageById
                     settingsPopup.open()
                 }
                 
@@ -179,7 +179,7 @@ Rectangle {
                             bundleController: root.uiSession?.bundleController
                             activityController: root.uiSession?.activityController
                             pluginController: root.uiSession?.pluginController
-                            guideController: root.guideController
+                            guideController: root.uiSession?.guideController
                         }
 
                         CommittingPage {
@@ -196,7 +196,7 @@ Rectangle {
                             uiSessionPopups: root.uiSession?.popups
                             pluginController: root.uiSession?.pluginController
                             terminalController: root.uiSession?.terminalController
-                            guideController: root.guideController
+                            guideController: root.uiSession?.guideController
                         }
 
                         PluginsPage {
