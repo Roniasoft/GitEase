@@ -32,6 +32,7 @@ Rectangle {
     property   UserAuthenticationPopup      userAuthenticationPopup
     property   string                       rootPath
     property   GitScanner                   gitScanner
+    property   GuideController              guideController:          null
     property   var                          reposModel:               []
     property   var                          selectedIndexes:          []
     property   bool                         isRunning:                false
@@ -607,6 +608,40 @@ Rectangle {
         spacing: 4
         anchors.fill: parent
         anchors.margins: 20
+
+        GuideHoverTrigger {
+            guideController: root.guideController
+            guideId: "repo_forest_popup_tutorial"
+            guideName: "Repo Forest"
+            guideIcon: Style.icons.tree
+            stepsFactory: function() {
+                return [
+                    {
+                        targetProvider: function() { return repoListView },
+                        icon: Style.icons.tree,
+                        title: "Discovered Repositories",
+                        description: "Every git repository found under the selected root folder is listed here. Check the ones you want to include in a bulk operation, or use Select All.",
+                        isInPopup: true
+                    },
+                    {
+                        targetProvider: function() { return fetchButton },
+                        icon: Style.icons.download,
+                        title: "Fetch All",
+                        description: "Fetches updates for every selected repository in one go.",
+                        commands: [{ command: "git fetch --all" }],
+                        isInPopup: true
+                    },
+                    {
+                        targetProvider: function() { return pullButton },
+                        icon: Style.icons.arrowDown,
+                        title: "Pull All",
+                        description: "Pulls changes into every selected repository at once.",
+                        commands: [{ command: "git pull" }],
+                        isInPopup: true
+                    }
+                ]
+            }
+        }
 
         RowLayout {
             Layout.fillWidth: true
