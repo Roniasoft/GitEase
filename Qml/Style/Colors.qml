@@ -15,6 +15,7 @@ QtObject{
     property color mutedLavenderSlate:  "#9898B4"
     property color vibrantMint:         "#4ADE80"
     property color softCoralMist:       "#F87171"
+    property color subtleAzureGlow:     "#243B82F6"
 
     // Primary colors
     property color primaryBackground:   "#FDFDFD"
