@@ -37,6 +37,7 @@ QtObject {
 
     readonly property string pluginApiBaseUrl:               "https://gitease.app/api"
     readonly property string fetchPluginsRequestKey:         "plugin-fetch"
+    readonly property string fetchCategoriesRequestKey:      "plugin-fetch-categories"
     readonly property string checkUpdatesRequestKey:         "plugin-check-updates"
     readonly property string getPluginDownloadKeyPrefix:     "plugin-get-download-"
     readonly property string downloadPluginKeyPrefix:        "plugin-download-"
@@ -108,6 +109,8 @@ QtObject {
         function onRequestFinished(requestKey, response) {
             if (requestKey === root.fetchPluginsRequestKey) {
                 root.handleFetchPluginsResponse(response)
+            } else if (requestKey === root.fetchCategoriesRequestKey) {
+                root.handleFetchPluginsCategoriesResponse(response)
             } else if (requestKey === root.checkUpdatesRequestKey) {
                 root.handleCheckUpdatesResponse(response)
             } else if (requestKey.startsWith(root.getPluginDownloadKeyPrefix)) {
@@ -164,6 +167,24 @@ QtObject {
 
     /* Functions
      * ****************************************************************************************/
+    // Fetches plugins categories
+    function fetchPluginsCategories() {
+        console.warn("[fetchPluginsCategories]")
+
+        if (!root.networkController || root.busy)
+            return
+
+        root.busy = true
+
+        let url = root.pluginApiBaseUrl + "/plugins/categories"
+
+        root.networkController.sendRequest(
+            root.fetchCategoriesRequestKey,
+            url,
+            root.networkController.GET
+        )
+    }
+
     // Fetches page 1 and REPLACES the current list (initial load or new search).
     function fetchAvailablePlugins(page, search) {
         console.warn("[fetchAvailablePlugins]", page, search)
@@ -312,6 +333,37 @@ QtObject {
             appendPlugins(serverPlugins)
         } else {
             mergePlugins(serverPlugins)
+        }
+    }
+
+    function handleFetchPluginsCategoriesResponse(response) {
+        if (!root.appModel)
+            return
+
+        root.busy = false
+        let payload = response?.data ?? {}
+
+        if (payload?.success === false) {
+            console.warn("[PluginController] Fetch plugins categories failed:", payload?.error ?? "unknown error")
+            return
+        }
+
+        root.appModel.pluginsCategories.clear()
+
+        let addedCategories = {}
+
+        for (const category of payload.data) {
+            if (addedCategories[category.id])
+                continue
+
+            addedCategories[category.id] = true
+
+            root.appModel.pluginsCategories.append({
+                id: category.id,
+                name: category.name,
+                color: category.color,
+                iconUrl: category.icon_url
+            })
         }
     }
 
@@ -466,6 +518,9 @@ QtObject {
             size:            sp.size_kb ? (sp.size_kb + " KB") : "",
             iconUrl:         sp.icon_url         || "",
             releaseDate:     sp.release_date     || "",
+            category:        sp.category,
+            mainColor:       getCategoryColor(sp.category),
+            donwloadsCount:  sp.donwloads_count,
             isInstalled:     !!local,
             isEnabled:       local ? local.enabled : false,
             isCompatible:    local ? local.loaded  : true,
@@ -483,6 +538,8 @@ QtObject {
             author:          local.author,
             latestVersion:   local.version    || "",
             minAppVersion:   local.apiVersion || "",
+            category:        sp.category,
+            mainColor:       getCategoryColor(sp.category),
             size:            "",
             iconUrl:         "",
             releaseDate:     "",
@@ -537,5 +594,17 @@ QtObject {
         root.appModel.plugins = infos.map(function(info) {
             return buildLocalEntry(info)
         })
+    }
+
+    // Get plugin main color based on its categoryId
+    function getCategoryColor(categoryId) {
+        for (let i = 0; i < root.appModel.pluginsCategories.count; i++) {
+            let category = root.appModel.pluginsCategories.get(i)
+
+            if (category.id === categoryId)
+                return category.color
+        }
+
+        return ""
     }
 }
