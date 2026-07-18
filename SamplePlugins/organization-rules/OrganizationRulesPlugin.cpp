@@ -10,7 +10,8 @@ void OrganizationRulesPlugin::initialize(IPluginContext *ctx)
         1, 0,
         "RuleController",
         m_ruleManager);
-    ctx->registerDock(this);
+    ctx->registerPage(this);
+    ctx->registerRule(this);
 }
 
 void OrganizationRulesPlugin::repositoryChanged(const QString &repoPath)

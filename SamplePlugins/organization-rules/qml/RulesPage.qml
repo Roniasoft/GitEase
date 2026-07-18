@@ -13,14 +13,15 @@ import GitEaseOrganizationRulesPlugin
  * Fetching list of rules from the repo and displaying it
  */
 
-IPopup {
+Rectangle {
     id: root
+
+    color: Style.colors.primaryBackground
 
     /* Property Declarations
      * ****************************************************************************************/
     property int                     selectedCategory: 0
     property int                     selectedRule: -1
-    //property RuleController          ruleController: null
     property var                     pendingNavigationAction: null
     property NotificationController  notificationController:  null
 
@@ -41,11 +42,6 @@ IPopup {
     ListModel { id: pushRules }
     ListModel { id: notificationRules }
     ListModel { id: hookRules }
-
-    /* Object Properties
-     * ****************************************************************************************/
-    width: 1400
-    height: 1000
 
     /* Children
      * ****************************************************************************************/
@@ -272,7 +268,7 @@ IPopup {
             root.notificationController.error(res.errorMessage, "Import Error", 5000)
             return
         }
-        var data = JSON.parse(result.data)
+        var data = JSON.parse(res.data)
         loadArrayInto(commitRules, data.rules.commitMessage)
         loadArrayInto(branchRules, data.rules.branchNaming)
         loadArrayInto(fileRules, data.rules.fileCode)
