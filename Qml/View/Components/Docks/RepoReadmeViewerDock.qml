@@ -2,9 +2,9 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import GitEase
-import GitEase_Style
 import GitEase_Style_Impl
+import GitEase_Style
+import GitEase
 
 /*! ***********************************************************************************************
  * RebaseDock
@@ -15,21 +15,48 @@ UtilitiesCard {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property RepositoryController repoController: null
-    property string markdownText: ""
+    property RepositoryController repositoryController: null
+    property string repoDir: root.repositoryController.appModel.currentRepository.path ?? ""
+    property var possibleFileNames: ["README.md", "README", "README.txt", "README.markdown"]
 
     /* Object Properties
      * ****************************************************************************************/
     title: "README Preview"
     icon: Style.icons.file
 
+    /* Slots
+     * ****************************************************************************************/
+    onRepoDirChanged: {
+        loadReadmeFile()
+    }
+
+    Component.onCompleted: {
+        loadReadmeFile()
+    }
+
+    /* Children
+     * ****************************************************************************************/
+    FilePreviewController {
+        id: previewController
+    }
+
     content: ScrollView {
+        clip: true
 
         TextArea {
             readOnly: true
             wrapMode: TextEdit.Wrap
             textFormat: TextEdit.MarkdownText
-            text: root.markdownText
+            text: previewController.exists ? previewController.content : ""
         }
+    }
+
+    /* functions
+     * ****************************************************************************************/
+    function loadReadmeFile() {
+        if (!repoDir)
+            return
+        const filePath = previewController.findTheFile(repoDir, possibleFileNames)
+        previewController.getFileContent(filePath)
     }
 }

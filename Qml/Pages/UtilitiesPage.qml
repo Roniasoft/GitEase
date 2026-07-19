@@ -150,6 +150,7 @@ Item {
             RepoReadmeViewerDock {
                 width: 330
                 height: 390
+                repositoryController: root.repositoryController
             }
 
             // ── Plugin docks ─────────────────────────────────────────────────

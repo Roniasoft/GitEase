@@ -1,6 +1,7 @@
 #include "FileContentWatcher.h"
 
 FileContentWatcher::FileContentWatcher(QObject *parent)
+ : QObject(parent)
 {
 
 }
@@ -37,6 +38,10 @@ void FileContentWatcher::setFilePath(const QString &filePath)
 
     updateWatchPath();
     reload();
+}
+
+void FileContentWatcher::updateWatchPath()
+{
 }
 
 void FileContentWatcher::reload()
@@ -77,21 +82,34 @@ void FileContentWatcher::reload()
     emit contentChanged();
 }
 
-QStringList FileContentWatcher::findFiles(const QStringList &nameFilters, bool recursive) const
+QStringList FileContentWatcher::findFiles(const QString &repoDir, const QStringList &possibleFileNames,
+                                          bool recursive) const
 {
-    if (!recursive) {
-        return m_absoluteDir.entryList(nameFilters, QDir::Files);
-    }
-
     QStringList files;
+    const QDir repoDirectory(repoDir);
 
-    QDirIterator it(m_absoluteDir.path(),
-                    nameFilters,
+    if (!repoDirectory.exists())
+        return files;
+
+    const QDirIterator::IteratorFlags flags =
+        recursive ? QDirIterator::Subdirectories
+                  : QDirIterator::NoIteratorFlags;
+
+    QDirIterator it(repoDirectory.absolutePath(),
                     QDir::Files,
-                    QDirIterator::Subdirectories);
+                    flags);
 
-    while (it.hasNext())
-        files << it.next();
+    while (it.hasNext()) {
+        const QString filePath = it.next();
+        const QString fileName = QFileInfo(filePath).fileName();
+
+        for (const QString &possibleName : possibleFileNames) {
+            if (fileName.compare(possibleName, Qt::CaseInsensitive) == 0) {
+                files.append(filePath);
+                break;
+            }
+        }
+    }
 
     return files;
 }

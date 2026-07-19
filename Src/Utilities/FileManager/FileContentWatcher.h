@@ -26,7 +26,7 @@ public:
     void setFilePath(const QString &filePath);
 
     Q_INVOKABLE void reload();
-    Q_INVOKABLE QStringList findFiles(const QStringList &nameFilters, bool recursive = true) const;
+    Q_INVOKABLE QStringList findFiles(const QString &repoDir, const QStringList &nameFilters, bool recursive = true) const;
 
 signals:
     void filePathChanged();

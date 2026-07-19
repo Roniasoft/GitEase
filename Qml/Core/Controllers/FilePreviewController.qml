@@ -8,17 +8,22 @@ import GitEase
 QtObject {
     id: root
 
-    property FileContentWatcher watcher: FileContentWatcher {}
+    property FileContentWatcher watcher: FileContentWatcher {
+        id: fileWatcher
+    }
 
-    readonly property alias filePath: watcher.filePath
-    readonly property alias content: watcher.content
-    readonly property alias exists: watcher.exists
-    readonly property alias error: watcher.error
+    readonly property alias filePath: fileWatcher.filePath
+    readonly property alias content: fileWatcher.content
+    readonly property alias exists: fileWatcher.exists
+    readonly property alias error: fileWatcher.error
 
-    function findTheFile(possibleFileNames) {
-        return watcher.findFiles(possibleFileNames)[0]
+    function findTheFile(repoDir, possibleFileNames) {
+        const files = fileWatcher.findFiles(repoDir, possibleFileNames)
+
+        return files.length > 0 ? files[0] : ""
     }
 
     function getFileContent(filePath) {
+        fileWatcher.filePath = filePath
     }
 }
