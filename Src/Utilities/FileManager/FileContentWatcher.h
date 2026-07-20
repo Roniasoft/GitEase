@@ -35,7 +35,6 @@ signals:
     void existsChanged();
 
 private:
-    void updateWatchPath();
 
     QFileSystemWatcher m_watcher;
     QString m_filePath;

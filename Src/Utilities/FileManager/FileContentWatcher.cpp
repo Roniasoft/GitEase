@@ -35,13 +35,7 @@ void FileContentWatcher::setFilePath(const QString &filePath)
     m_absoluteDir.setPath(QFileInfo(filePath).absolutePath());
 
     emit filePathChanged();
-
-    updateWatchPath();
     reload();
-}
-
-void FileContentWatcher::updateWatchPath()
-{
 }
 
 void FileContentWatcher::reload()
@@ -82,22 +76,33 @@ void FileContentWatcher::reload()
     emit contentChanged();
 }
 
-QStringList FileContentWatcher::findFiles(const QString &repoDir, const QStringList &possibleFileNames,
-                                          bool recursive) const
+QStringList FileContentWatcher::findFiles(const QString &directoryPath, const QStringList &possibleFileNames, bool recursive) const
 {
     QStringList files;
-    const QDir repoDirectory(repoDir);
+    const QDir rootDir(directoryPath);
 
-    if (!repoDirectory.exists())
+    if (!rootDir.exists())
         return files;
 
-    const QDirIterator::IteratorFlags flags =
-        recursive ? QDirIterator::Subdirectories
-                  : QDirIterator::NoIteratorFlags;
+    // First: check only the repository root.
+    const QFileInfoList rootFiles = rootDir.entryInfoList(QDir::Files | QDir::Readable, QDir::Name);
 
-    QDirIterator it(repoDirectory.absolutePath(),
-                    QDir::Files,
-                    flags);
+    for (const QString &possibleName : possibleFileNames) {
+        for (const QFileInfo &fileInfo : rootFiles) {
+            if (fileInfo.fileName().compare(
+                    possibleName,
+                    Qt::CaseInsensitive) == 0) {
+                files.append(fileInfo.absoluteFilePath());
+            }
+        }
+    }
+
+    // A root README was found, or function is being called with no recursive option, so don't search nested folders.
+    if (!files.isEmpty() || !recursive)
+        return files;
+
+    // Only as a fallback, search subdirectories.
+    QDirIterator it(rootDir.absolutePath(), QDir::Files | QDir::Readable, QDirIterator::Subdirectories);
 
     while (it.hasNext()) {
         const QString filePath = it.next();
