@@ -16,6 +16,8 @@ QtObject{
     property color vibrantMint:         "#4ADE80"
     property color softCoralMist:       "#F87171"
     property color subtleAzureGlow:     "#243B82F6"
+    property color obsidianDeep:        "#111118"
+    property color softCloudWhite:      "#F4F4F8"
 
     // Primary colors
     property color primaryBackground:   "#FDFDFD"
@@ -177,7 +179,7 @@ QtObject{
     property color terminalWorkDir:     "#58a6ff"  // GitHub blue
     property color terminalCommand:     "#e6edf3"  // GitHub text
 
-    property color contextMenuBackground: "#EDEDED"
+    property color contextMenuBackground: softCloudWhite
     property color contextMenuBorder:     "#CDD2DA"
     property color contextMenuSeparator:  "#DCE1E9"
     property color contextMenuHover:      "#E7E7E7"
