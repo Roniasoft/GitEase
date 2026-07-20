@@ -17,7 +17,7 @@ UtilitiesCard {
      * ****************************************************************************************/
     property RepositoryController repositoryController: null
     property string repoDir: root.repositoryController.appModel.currentRepository.path ?? ""
-    property var possibleFileNames: ["README.md", "README", "README.txt", "README.markdown"]
+    property var possibleFileNames: ["README.md", "README.rst", "README.txt"]
 
     /* Object Properties
      * ****************************************************************************************/
@@ -48,6 +48,7 @@ UtilitiesCard {
             wrapMode: TextEdit.Wrap
             textFormat: TextEdit.MarkdownText
             text: previewController.exists ? previewController.content : ""
+            background: Item {}
         }
     }
 
