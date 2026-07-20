@@ -58,13 +58,14 @@ UtilitiesCard {
 
         Rectangle {
             Layout.fillWidth: true
-            Layout.fillHeight: true
+            Layout.preferredHeight: infoRow.implicitHeight + 20
             radius: 6
             color: Style.colors.secondaryBackground
             border.width: 1
             border.color: Style.colors.secondaryBorder
 
             RowLayout {
+                id: infoRow
                 anchors.fill: parent
                 anchors.margins: 10
                 spacing: 12
@@ -103,10 +104,6 @@ UtilitiesCard {
                     }
                 }
             }
-        }
-
-        Item {
-            Layout.fillHeight: true
         }
 
         Button {
