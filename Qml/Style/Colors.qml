@@ -185,4 +185,7 @@ QtObject{
     property color contextMenuHover:      "#E7E7E7"
 
     property color branchSelectedAccent:  "#2563EB"
+
+    property color fileBrowserRowHoverBg: Qt.rgba(0,0,0,0.04)
+    property color fileBrowserSearchBg:  Qt.rgba(0,0,0,0.05)
 }

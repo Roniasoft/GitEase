@@ -164,6 +164,9 @@ QtObject {
         contextMenuHover:      "#34343D"
 
         branchSelectedAccent:  "#93C5FD"
+
+        fileBrowserRowHoverBg: Qt.rgba(1,1,1,0.04)
+        fileBrowserSearchBg:  Qt.rgba(1,1,1,0.05)
     }
 
     property           string       currentTheme:               "Modern Light"
