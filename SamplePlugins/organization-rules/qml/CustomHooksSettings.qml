@@ -56,7 +56,7 @@ RuleSettingsBase {
                         width: 200
                         minHeight: 40
                         focusBorderWidth: 1
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.weight: 400
                         font.pixelSize: 12
                         model: ListModel {
@@ -229,7 +229,7 @@ RuleSettingsBase {
                                     Text {
                                         text: "="
                                         verticalAlignment: Text.AlignVCenter
-                                        font.family: Style.fontTypes.roboto
+                                        font.family: Style.fontTypes.inter
                                         font.pixelSize: 12
                                         color: Style.colors.placeholderText
                                     }
@@ -371,7 +371,7 @@ RuleSettingsBase {
                                            ? "white"
                                            : "#DDD"
                                     font.bold: row.currentIndex === index
-                                    font.family: Style.fontTypes.roboto
+                                    font.family: Style.fontTypes.inter
                                     font.pixelSize: 11
                                 }
 

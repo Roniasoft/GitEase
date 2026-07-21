@@ -47,7 +47,7 @@ IPopup {
                 Text {
                     text: "Import Rules"
                     Layout.fillWidth: true
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                     font.pixelSize: 13
                     color: "white"
                     font.bold: true
@@ -88,7 +88,7 @@ IPopup {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 text: "This will replace all existing rules for this repository with the ones from the imported file. This cannot be undone."
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 font.pixelSize: 12
                 color: Style.colors.mutedText
                 wrapMode: Text.WordWrap

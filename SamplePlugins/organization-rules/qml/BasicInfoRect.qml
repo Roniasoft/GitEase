@@ -104,7 +104,7 @@ RuleChip {
                                        ? "white"
                                        : "#DDD"
                                 font.bold: severitySelector.severityCurrentIndex === index
-                                font.family: Style.fontTypes.roboto
+                                font.family: Style.fontTypes.inter
                                 font.pixelSize: 11
                             }
 

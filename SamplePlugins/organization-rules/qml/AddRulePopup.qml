@@ -45,7 +45,7 @@ IPopup {
                 Text {
                     text: "Choose rule type"
                     Layout.fillWidth: true
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                     font.pixelSize: 13
                     color: "white"
                     font.bold: true
@@ -136,7 +136,7 @@ IPopup {
                             ColumnLayout {
                                 Text {
                                     text: modelData.name
-                                    font.family: Style.fontTypes.roboto
+                                    font.family: Style.fontTypes.inter
                                     font.pixelSize: 12
                                     color: "white"
                                     font.bold: true
@@ -144,7 +144,7 @@ IPopup {
 
                                 ScrollingText {
                                     text: modelData.description
-                                    font.family: Style.fontTypes.roboto
+                                    font.family: Style.fontTypes.inter
                                     font.pixelSize: 10
                                     color: Style.colors.mutedText
                                     Layout.fillWidth: true
