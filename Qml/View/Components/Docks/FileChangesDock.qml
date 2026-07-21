@@ -297,36 +297,14 @@ DetachablePanel {
                                 Layout.fillHeight: true
                                 spacing: 0
 
-                                Label {
-                                    text: {
-                                        switch(fileData.deltaStatus) {
-                                            case GitFileStatus.ADDED:
-                                                return "Added"
-                                            case GitFileStatus.DELETED:
-                                                return "Deleted"
-                                            case GitFileStatus.MODIFIED:
-                                                return "Modified"
-                                            case GitFileStatus.RENAMED:
-                                                return "Renamed"
-                                            case GitFileStatus.UNTRACKED:
-                                                return "Untracked"
-                                            default:
-                                                return "Untracked"
-                                        }
-                                    }
-
-                                    color: Style.colors.titleText
-                                    verticalAlignment: Text.AlignVCenter
-                                    font.pixelSize: Style.appFont.mediumPt
+                                Item {
                                     Layout.fillWidth: true
-                                    Layout.leftMargin: 8
-                                    Layout.rightMargin: 8
-                                    horizontalAlignment: Text.AlignHCenter
-                                    elide: Text.ElideRight
-                                    wrapMode: Text.NoWrap
-                                    background: Rectangle {
-                                        radius: 3
-                                        color: root.getChangeColor(fileData.deltaStatus)
+                                    Layout.fillHeight: true
+
+                                    FileStatusTag {
+                                        anchors.centerIn: parent
+                                        width: Math.min(implicitWidth, parent.width)
+                                        deltaStatus: fileData.deltaStatus
                                     }
                                 }
                             }
@@ -468,21 +446,4 @@ DetachablePanel {
        }
        return ""; // Return empty string if no extension found
    }
-
-    function getChangeColor(type) : string {
-        switch(type) {
-        case GitFileStatus.ADDED:
-            return Style.colors.addedFile
-        case GitFileStatus.DELETED:
-            return Style.colors.deletededFile
-        case GitFileStatus.MODIFIED:
-            return Style.colors.modifiediedFile
-        case GitFileStatus.RENAMED:
-            return Style.colors.renamedFile
-        case GitFileStatus.UNTRACKED:
-            return Style.colors.untrackedFile
-        default:
-            return Style.colors.untrackedFile
-        }
-    }
 }
