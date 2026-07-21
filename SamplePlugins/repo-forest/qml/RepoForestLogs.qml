@@ -34,7 +34,7 @@ ColumnLayout {
         Text {
             Layout.fillWidth: true
             text: "Operation Log"
-            font.family: Style.fontTypes.roboto
+            font.family: Style.fontTypes.inter
             font.pixelSize: 12
             font.bold: true
             color: Style.colors.foreground
@@ -115,7 +115,7 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 60
                         text: modelData.timestamp
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: Style.colors.mutedText
                     }
@@ -123,7 +123,7 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 120
                         text: modelData.repoName
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         font.bold: true
                         color: Style.colors.foreground
@@ -133,7 +133,7 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 80
                         text: "[" + modelData.operation.toUpperCase() + "]"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: modelData.operation === "fetch" ? Style.colors.repoItemStatusFetchingText : Style.colors.repoItemStatusPullingText
                     }
@@ -141,7 +141,7 @@ ColumnLayout {
                     Text {
                         Layout.preferredWidth: 80
                         text: modelData.remoteName ? ("@" + modelData.remoteName) : ""
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: Style.colors.mutedText
                     }
@@ -149,7 +149,7 @@ ColumnLayout {
                     Text {
                         Layout.fillWidth: true
                         text: modelData.message
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: {
                             if (modelData.status === "Success" || modelData.status === "Done")

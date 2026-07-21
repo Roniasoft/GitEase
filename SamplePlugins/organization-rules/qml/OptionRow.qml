@@ -38,14 +38,14 @@ RowLayout {
 
         Text {
             text: root.title
-            font.family: Style.fontTypes.roboto
+            font.family: Style.fontTypes.inter
             color: Style.colors.placeholderText
             font.pixelSize: 12
         }
 
         Text {
             text: root.subtitle
-            font.family: Style.fontTypes.roboto
+            font.family: Style.fontTypes.inter
             color: Style.colors.mutedText
             font.pixelSize: 11
             visible: root.subtitle !== ""

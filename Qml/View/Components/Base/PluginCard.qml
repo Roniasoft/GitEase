@@ -104,13 +104,13 @@ Rectangle {
                     color: Style.colors.foreground
                     font.pixelSize: Style.appFont.h2Pt
                     font.bold: true
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                 }
                 Label {
                     text: root.plugin.author
                     color: Style.colors.mutedText
                     font.pixelSize: Style.appFont.mediumPt
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                     wrapMode: Text.WordWrap
                 }
             }
@@ -136,7 +136,7 @@ Rectangle {
             text: root.plugin.description
             color: Style.colors.placeholderText
             font.pixelSize: Style.appFont.h3Pt
-            font.family: Style.fontTypes.roboto
+            font.family: Style.fontTypes.inter
             Layout.fillWidth: true
         }
 
@@ -148,7 +148,7 @@ Rectangle {
                 text: "📦 " + root.plugin.size
                 color: Style.colors.mutedText
                 font.pixelSize: Style.appFont.largePt
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 wrapMode: Text.WordWrap
             }
             Rectangle {
@@ -162,7 +162,7 @@ Rectangle {
                 text: "⬆ " + root.plugin.latestVersion
                 color: Style.colors.mutedText
                 font.pixelSize: Style.appFont.largePt
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 wrapMode: Text.WordWrap
             }
 
@@ -297,7 +297,7 @@ Rectangle {
                 text: compatibilityRow.supported ? "Compatible with your version of GitEase" : "Incompatible with your version of GitEase"
                 color: Style.colors.placeholderText
                 font.pixelSize: Style.appFont.h3Pt
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 wrapMode: Text.WordWrap
             }
         }

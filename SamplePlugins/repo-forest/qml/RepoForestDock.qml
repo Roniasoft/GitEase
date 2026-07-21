@@ -87,7 +87,7 @@ UtilitiesCard {
                         text: "This tool helps you manage multiple repositories from a single root directory."
                         font.pixelSize: 13
                         color: Style.colors.mutedText
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         wrapMode: Text.WordWrap
                     }
 
@@ -99,7 +99,7 @@ UtilitiesCard {
                             "• Pull changes for all or selected repositories"
                         font.pixelSize: 10
                         color: Style.colors.mutedText
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         lineHeight: 1.1
                     }
                 }

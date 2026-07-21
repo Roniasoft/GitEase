@@ -194,7 +194,7 @@ RuleSettingsBase {
 
                         Text {
                             text: "Blank line required between subject and body"
-                            font.family: Style.fontTypes.roboto
+                            font.family: Style.fontTypes.inter
                             color: Style.colors.mutedText
                             font.pixelSize: 12
                         }

@@ -49,7 +49,7 @@ Rectangle {
             Text {
                 text: "Rules"
                 Layout.fillWidth: true
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 font.pixelSize: 13
                 color: Style.colors.placeholderText
             }
@@ -246,7 +246,7 @@ Rectangle {
 
                                 Text {
                                     text: modelData.name
-                                    font.family: Style.fontTypes.roboto
+                                    font.family: Style.fontTypes.inter
                                     color: Style.colors.placeholderText
                                     font.pixelSize: 11
                                 }
@@ -259,7 +259,7 @@ Rectangle {
 
                                 Text {
                                     text: categoryBlock.categoryRulesModel.count
-                                    font.family: Style.fontTypes.roboto
+                                    font.family: Style.fontTypes.inter
                                     color: Style.colors.placeholderText
                                     font.pixelSize: 11
                                 }
@@ -299,7 +299,7 @@ Rectangle {
 
                                     ScrollingText {
                                         text: ruleName
-                                        font.family: Style.fontTypes.roboto
+                                        font.family: Style.fontTypes.inter
                                         font.pixelSize: 11
                                         color: Style.colors.textButton
                                         Layout.alignment: Qt.AlignVCenter

@@ -74,7 +74,7 @@ RowLayout {
                 return display.length > 0 ? "Write Filter By " + display : "Write Filter By"
             }
             text: headerRow.filterText
-            font.family: Style.fontTypes.roboto
+            font.family: Style.fontTypes.inter
             font.weight: 400
             font.pixelSize: Style.appFont.captionPt
             borderRadius: 5
@@ -99,7 +99,7 @@ RowLayout {
         Layout.preferredHeight: headerRow.controlSize
 
         text: "Filters"
-        font.family: Style.fontTypes.roboto
+        font.family: Style.fontTypes.inter
         font.weight: Font.Medium
         font.pixelSize: Style.appFont.smallPt
         leftPadding: 12
@@ -243,7 +243,7 @@ RowLayout {
         icon.name: Style.icons.arrowDown
         icon.width: Style.appFont.h3Pt
         icon.height: Style.appFont.h3Pt
-        font.family: Style.fontTypes.roboto
+        font.family: Style.fontTypes.inter
         font.pixelSize: Style.appFont.defaultPt
         font.weight: Font.Medium
         text: "Pull"
@@ -281,7 +281,7 @@ RowLayout {
         icon.name: !isBusy ? Style.icons.arrowUp : ""
         icon.width: Style.appFont.h3Pt
         icon.height: Style.appFont.h3Pt
-        font.family: Style.fontTypes.roboto
+        font.family: Style.fontTypes.inter
         font.pixelSize: Style.appFont.defaultPt
         font.weight: Font.Medium
         text: !isBusy ? "Push" : ""
@@ -301,7 +301,7 @@ RowLayout {
         icon.name: Style.icons.download
         icon.width: Style.appFont.h3Pt
         icon.height: Style.appFont.h3Pt
-        font.family: Style.fontTypes.roboto
+        font.family: Style.fontTypes.inter
         font.pixelSize: Style.appFont.defaultPt
         font.weight: Font.Medium
         text: "Fetch"
