@@ -207,13 +207,11 @@ IPopup {
                                 anchors.rightMargin: 4
                                 spacing: 6
 
-                                Text {
-                                    text: root.statusLabel(modelData.deltaStatus)
-                                    color: Style.colors.mutedText
-                                    font.pixelSize: Style.appFont.microPt
+                                FileStatusTag {
                                     Layout.preferredWidth: 14
-                                    horizontalAlignment: Text.AlignHCenter
-                                    font.bold: true
+                                    Layout.alignment: Qt.AlignVCenter
+                                    compact: true
+                                    deltaStatus: modelData.deltaStatus
                                 }
 
                                 Text {
@@ -283,25 +281,6 @@ IPopup {
 
         if (result.success) {
             // optional: emit signal or callback to parent to refresh list
-        }
-    }
-
-    function statusLabel(fileOrDelta) {
-        switch (fileOrDelta) {
-            case GitFileStatus.ADDED:
-                return "A"
-
-            case GitFileStatus.DELETED:
-                return "D"
-
-            case GitFileStatus.MODIFIED:
-                return "M"
-
-            case GitFileStatus.RENAMED:
-                return "R"
-
-            default:
-                return "?"
         }
     }
 }
