@@ -99,7 +99,7 @@ Rectangle {
         anchors.centerIn: parent
         text: root.compact ? root.statusLetter : root.statusText
         color: root.compact ? Qt.darker(root.statusColor, 1.5) : Style.colors.titleText
-        font.family: Style.fontTypes.roboto
+        font.family: Style.fontTypes.inter
         font.pixelSize: root.compact ? Style.appFont.defaultPt : Style.appFont.mediumPt
         font.bold: root.compact
     }
