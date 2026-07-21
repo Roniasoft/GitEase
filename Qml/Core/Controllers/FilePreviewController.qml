@@ -26,4 +26,8 @@ QtObject {
     function getFileContent(filePath) {
         fileWatcher.filePath = filePath
     }
+
+    function openExternally() {
+        return fileWatcher.openExternally()
+    }
 }

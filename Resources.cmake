@@ -37,6 +37,7 @@ set(RESOURCES_CORE
     Qml/Core/Controllers/ConflictController.qml
     Qml/Core/Controllers/TagController.qml
     Qml/Core/Controllers/PluginController.qml
+    Qml/Core/Controllers/FilePreviewController.qml
 
     # Scripts
     Qml/Core/Scripts/GraphUtils.js
@@ -108,6 +109,8 @@ set(RESOURCES_COMPONENTS
     Qml/View/Components/Docks/RepositoriesHistoryDock.qml       # All Repositories Dock
 
     Qml/View/Components/Docks/RepoForestDock.qml                # Fetch/ Pull all Repositories
+
+    Qml/View/Components/Docks/RepoReadmeViewerDock.qml          # RepoReadmeViewerDock: loads readme file
 
     # File list components (commit UI)
     Qml/View/Components/FileLists/UnstagedFileListSection.qml  # Unstaged File Status Section

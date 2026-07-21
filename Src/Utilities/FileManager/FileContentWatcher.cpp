@@ -118,3 +118,18 @@ QStringList FileContentWatcher::findFiles(const QString &directoryPath, const QS
 
     return files;
 }
+
+bool FileContentWatcher::openExternally() const
+{
+    if (m_filePath.isEmpty())
+        return false;
+
+    const QFileInfo fileInfo(m_filePath);
+
+    if (!fileInfo.exists() || !fileInfo.isFile())
+        return false;
+
+    return QDesktopServices::openUrl(
+        QUrl::fromLocalFile(fileInfo.absoluteFilePath())
+        );
+}

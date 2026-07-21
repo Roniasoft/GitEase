@@ -1,10 +1,12 @@
 #pragma once
 
 #include <QObject>
-#include <QtQml/qqmlregistration.h>#include <QUrl>
+#include <QtQml/qqmlregistration.h>
+#include <QUrl>
 #include <QDir>
 #include <QDirIterator>
 #include <QFileSystemWatcher>
+#include <QDesktopServices>
 
 class FileContentWatcher : public QObject
 {
@@ -27,6 +29,7 @@ public:
 
     Q_INVOKABLE void reload();
     Q_INVOKABLE QStringList findFiles(const QString &repoDir, const QStringList &nameFilters, bool recursive = true) const;
+    Q_INVOKABLE bool openExternally() const;
 
 signals:
     void filePathChanged();
