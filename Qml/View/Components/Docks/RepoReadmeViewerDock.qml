@@ -7,7 +7,7 @@ import GitEase_Style
 import GitEase
 
 /*! ***********************************************************************************************
- * RebaseDock
+ * RepoReadmeViewerDock
  * ************************************************************************************************/
 
 UtilitiesCard {
@@ -15,9 +15,9 @@ UtilitiesCard {
 
     /* Property Declarations
      * ****************************************************************************************/
-    property RepositoryController repositoryController: null
-    property string repoDir: root.repositoryController.appModel.currentRepository.path ?? ""
-    property var possibleFileNames: ["README.md", "README.rst", "README.txt"]
+    required property RepositoryController repositoryController
+    readonly property string repoDir: root.repositoryController.appModel.currentRepository.path ?? ""
+    readonly property var possibleFileNames: ["README.md", "README.rst", "README.txt"]
 
     /* Object Properties
      * ****************************************************************************************/
@@ -50,7 +50,7 @@ UtilitiesCard {
             Layout.fillHeight: true
             clip: true
             TextArea {
-                Layout.fillWidth: true
+                width: parent.width
                 readOnly: true
                 wrapMode: TextEdit.Wrap
                 textFormat: TextEdit.MarkdownText
@@ -60,7 +60,7 @@ UtilitiesCard {
         }
 
         Button {
-            id: actionBtn
+            id: openBtn
             Layout.fillWidth: true
             implicitHeight: 44
 
@@ -68,7 +68,7 @@ UtilitiesCard {
 
             background: Rectangle {
                 radius: 8
-                color: actionBtn.enabled ? (actionBtn.hovered) ? Style.colors.accentHover : Style.colors.accent : (Style.colors.disabledButton)
+                color: openBtn.enabled ? (openBtn.hovered) ? Style.colors.accentHover : Style.colors.accent : (Style.colors.disabledButton)
             }
 
             contentItem: Item {

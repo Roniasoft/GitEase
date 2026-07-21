@@ -1,9 +1,19 @@
 #include "FileContentWatcher.h"
 
-FileContentWatcher::FileContentWatcher(QObject *parent)
- : QObject(parent)
-{
+#include <QDesktopServices>
+#include <QDir>
+#include <QDirIterator>
+#include <QFile>
+#include <QFileInfo>
+#include <QUrl>
 
+FileContentWatcher::FileContentWatcher(QObject *parent)
+    : QObject(parent)
+{
+    connect(&m_watcher, &QFileSystemWatcher::fileChanged, this, [this](const QString &) {
+        updateWatchPath();
+        reload();
+    });
 }
 
 QString FileContentWatcher::filePath() const
@@ -14,11 +24,6 @@ QString FileContentWatcher::filePath() const
 QString FileContentWatcher::content() const
 {
     return m_content;
-}
-
-QString FileContentWatcher::error() const
-{
-    return m_error;
 }
 
 bool FileContentWatcher::exists() const
@@ -32,51 +37,59 @@ void FileContentWatcher::setFilePath(const QString &filePath)
         return;
 
     m_filePath = filePath;
-    m_absoluteDir.setPath(QFileInfo(filePath).absolutePath());
 
     emit filePathChanged();
+
+    updateWatchPath();
     reload();
+}
+
+void FileContentWatcher::updateWatchPath()
+{
+    if (!m_watcher.files().isEmpty())
+        m_watcher.removePaths(m_watcher.files());
+
+    if (m_filePath.isEmpty())
+        return;
+
+    const QFileInfo fileInfo(m_filePath);
+
+    if (fileInfo.exists() && fileInfo.isFile())
+        m_watcher.addPath(fileInfo.absoluteFilePath());
 }
 
 void FileContentWatcher::reload()
 {
-    m_exists = false;
-    m_error.clear();
-    m_content.clear();
+    QString newContent;
+    bool newExists = false;
 
-    if (m_filePath.isEmpty()) {
+    if (!m_filePath.isEmpty()) {
+        const QFileInfo fileInfo(m_filePath);
+
+        if (fileInfo.exists() && fileInfo.isFile()) {
+            QFile file(m_filePath);
+
+            if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+                newContent = QString::fromUtf8(file.readAll());
+                newExists = true;
+            }
+        }
+    }
+
+    if (m_content != newContent) {
+        m_content = std::move(newContent);
+        emit contentChanged();
+    }
+
+    if (m_exists != newExists) {
+        m_exists = newExists;
         emit existsChanged();
-        emit errorChanged();
-        emit contentChanged();
-        return;
     }
-
-    QFileInfo fileInfo(m_filePath);
-
-    if (!fileInfo.exists() || !fileInfo.isFile()) {
-        m_error = "File does not exist.";
-        emit errorChanged();
-        emit contentChanged();
-        return;
-    }
-
-    QFile file(m_filePath);
-
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        m_error = file.errorString();
-        emit errorChanged();
-        emit contentChanged();
-        return;
-    }
-
-    m_content = QString::fromUtf8(file.readAll());
-    m_exists = true;
-
-    emit existsChanged();
-    emit contentChanged();
 }
 
-QStringList FileContentWatcher::findFiles(const QString &directoryPath, const QStringList &possibleFileNames, bool recursive) const
+QStringList FileContentWatcher::findFiles(const QString &directoryPath,
+                                          const QStringList &possibleFileNames,
+                                          bool recursive) const
 {
     QStringList files;
     const QDir rootDir(directoryPath);
@@ -84,24 +97,18 @@ QStringList FileContentWatcher::findFiles(const QString &directoryPath, const QS
     if (!rootDir.exists())
         return files;
 
-    // First: check only the repository root.
     const QFileInfoList rootFiles = rootDir.entryInfoList(QDir::Files | QDir::Readable, QDir::Name);
 
     for (const QString &possibleName : possibleFileNames) {
         for (const QFileInfo &fileInfo : rootFiles) {
-            if (fileInfo.fileName().compare(
-                    possibleName,
-                    Qt::CaseInsensitive) == 0) {
+            if (fileInfo.fileName().compare(possibleName, Qt::CaseInsensitive) == 0)
                 files.append(fileInfo.absoluteFilePath());
-            }
         }
     }
 
-    // A root README was found, or function is being called with no recursive option, so don't search nested folders.
     if (!files.isEmpty() || !recursive)
         return files;
 
-    // Only as a fallback, search subdirectories.
     QDirIterator it(rootDir.absolutePath(), QDir::Files | QDir::Readable, QDirIterator::Subdirectories);
 
     while (it.hasNext()) {
@@ -121,15 +128,10 @@ QStringList FileContentWatcher::findFiles(const QString &directoryPath, const QS
 
 bool FileContentWatcher::openExternally() const
 {
-    if (m_filePath.isEmpty())
-        return false;
-
     const QFileInfo fileInfo(m_filePath);
 
     if (!fileInfo.exists() || !fileInfo.isFile())
         return false;
 
-    return QDesktopServices::openUrl(
-        QUrl::fromLocalFile(fileInfo.absoluteFilePath())
-        );
+    return QDesktopServices::openUrl(QUrl::fromLocalFile(fileInfo.absoluteFilePath()));
 }

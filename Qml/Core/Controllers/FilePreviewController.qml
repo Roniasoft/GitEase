@@ -11,14 +11,11 @@ QtObject {
     property FileContentWatcher watcher: FileContentWatcher {
         id: fileWatcher
     }
-
-    readonly property alias filePath: fileWatcher.filePath
     readonly property alias content: fileWatcher.content
     readonly property alias exists: fileWatcher.exists
-    readonly property alias error: fileWatcher.error
 
     function findTheFile(repoDir, possibleFileNames) {
-        const files = fileWatcher.findFiles(repoDir, possibleFileNames)
+        const files = fileWatcher.findFiles(repoDir, possibleFileNames, false)
 
         return files.length > 0 ? files[0] : ""
     }
