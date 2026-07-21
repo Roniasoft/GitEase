@@ -115,33 +115,10 @@ Rectangle {
             sourceComponent: root.rightAccessory
         }
 
-        Text {
+        FileStatusTag {
             Layout.alignment: Qt.AlignVCenter
-            text: {
-                switch (root.status) {
-                case GitFileStatus.StagedNew:
-                    return "A";
-                case GitFileStatus.Deleted:
-                case GitFileStatus.StagedDeleted:
-                    return "D";
-                case GitFileStatus.Modified:
-                case GitFileStatus.TypeChange:
-                case GitFileStatus.StagedModified:
-                    return "M";
-                case GitFileStatus.Renamed:
-                case GitFileStatus.StagedRenamed:
-                    return "R";
-                case GitFileStatus.Untracked:
-                    return "U";
-                default:
-                    return ""
-                }
-            }
-            visible: text !== ""
-            font.family: Style.fontTypes.inter
-            font.pixelSize: Style.appFont.defaultPt
-            font.bold: true
-            color: root.indicatorColor
+            compact: true
+            fileStatus: root.status
         }
     }
 
