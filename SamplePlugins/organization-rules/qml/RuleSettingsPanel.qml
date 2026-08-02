@@ -104,7 +104,7 @@ Rectangle {
                     contentItem: Text {
                         anchors.centerIn: parent
                         text: "Delete"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         font.bold: true
                         color: Style.colors.textButton
@@ -134,7 +134,7 @@ Rectangle {
                     contentItem: Text {
                         anchors.centerIn: parent
                         text: "Discard"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         font.bold: true
                         color: "#ccc"
@@ -160,7 +160,7 @@ Rectangle {
                     contentItem: Text {
                         anchors.centerIn: parent
                         text: "Save Changes"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         font.bold: true
                         color: Style.colors.textButton

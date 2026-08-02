@@ -661,7 +661,7 @@ Rectangle {
 
                 visible: root.queueState === RepoForest.QueueState.Ready
 
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 font.pixelSize: 12
 
                 Material.accent: Style.colors.accent
@@ -685,7 +685,7 @@ Rectangle {
                 Layout.fillWidth: false
                 text: "Auto Scroll"
 
-                font.family: Style.fontTypes.roboto
+                font.family: Style.fontTypes.inter
                 font.pixelSize: 12
 
                 Material.accent: Style.colors.accent
@@ -739,7 +739,7 @@ Rectangle {
 
                     contentItem: Text {
                         text: "Fetch"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: "#ffffff"
                     }
@@ -793,7 +793,7 @@ Rectangle {
 
                     contentItem: Text {
                         text: "Pull"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: "#ffffff"
                     }
@@ -848,7 +848,7 @@ Rectangle {
 
                     contentItem: Text {
                         text: pauseResumeButton.isQueuePaused ? "Resume" : "Pause"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: "#ffffff"
                     }
@@ -906,7 +906,7 @@ Rectangle {
 
                     contentItem: Text {
                         text: "Stop All"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: "#ffffff"
                     }
@@ -981,19 +981,19 @@ Rectangle {
 
                     Text {
                         text: "Selected: " + root.selectedCount
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: Style.colors.foreground
                     }
                     Text {
                         text: "Pending Fetch: " + root.pendingFetchCount
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: Style.colors.repoItemStatusFetchingText
                     }
                     Text {
                         text: "Pending Pull: " + root.pendingPullCount
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 11
                         color: Style.colors.repoItemStatusPullingText
                     }
@@ -1013,7 +1013,7 @@ Rectangle {
 
                     Text {
                         text: root.progressPercent + "%"
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         font.pixelSize: 12
                         font.weight: Font.Bold
                         color: Style.colors.accent

@@ -72,7 +72,7 @@ Rectangle {
                     Layout.fillWidth: true
                     text: root.modelData.name
                     font.pixelSize: 12
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                     font.weight: 400
                     font.letterSpacing: 0
                     color: Style.colors.foreground
@@ -169,7 +169,7 @@ Rectangle {
                             Layout.alignment: Qt.AlignVCenter
                             text: (status.progress > 0 && status.progress <= 99) ?
                                       `${root.modelData.status} ${status.progress} %` : root.modelData.status
-                            font.family: Style.fontTypes.roboto
+                            font.family: Style.fontTypes.inter
                             font.pixelSize: 12
                             font.weight: 300
                             color: status.statusTextColor
@@ -218,7 +218,7 @@ Rectangle {
                         Layout.fillWidth: true
                         text: root.modelData.path
                         font.pixelSize: 12
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         color: Style.colors.mutedText
                         font.weight: 400
                         font.letterSpacing: 0
@@ -240,7 +240,7 @@ Rectangle {
                         Layout.fillWidth: true
                         text: root.modelData.branchName
                         font.pixelSize: 12
-                        font.family: Style.fontTypes.roboto
+                        font.family: Style.fontTypes.inter
                         color: Style.colors.mutedText
                         font.weight: 400
                         font.letterSpacing: 0
@@ -264,7 +264,7 @@ Rectangle {
                     Layout.fillWidth: true
                     text: root.modelData.remote
                     font.pixelSize: 12
-                    font.family: Style.fontTypes.roboto
+                    font.family: Style.fontTypes.inter
                     color: Style.colors.mutedText
                     font.weight: 400
                     font.letterSpacing: 0
