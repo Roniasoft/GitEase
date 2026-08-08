@@ -466,7 +466,7 @@ IPopup {
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: root.createBranch()
+                                onClicked: root.createTag()
                             }
                         }
                     }
@@ -476,7 +476,7 @@ IPopup {
     }
 
 
-    function creatBranch(){
+    function createTag(){
                         let ctrl = root.tagController || (typeof uiSession !== "undefined" ? uiSession.tagController : null);
                         let notif = root.notificationController || (typeof uiSession !== "undefined" ? uiSession.notifications : null);
 
