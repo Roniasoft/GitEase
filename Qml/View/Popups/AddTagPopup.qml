@@ -89,8 +89,12 @@ IPopup {
 
             // Tag Name
             ColumnLayout {
-                spacing: 6
                 Layout.fillWidth: true
+                Layout.fillHeight: true
+                Layout.leftMargin: 18
+                Layout.rightMargin: 18
+                Layout.topMargin: 16
+                spacing: 0
 
                 Text {
                     text: "Tag Name"
@@ -394,7 +398,7 @@ IPopup {
                         radius: 6
                     }
 
-                    onClicked: {
+            }
                         let ctrl = root.tagController || (typeof uiSession !== "undefined" ? uiSession.tagController : null);
                         let notif = root.notificationController || (typeof uiSession !== "undefined" ? uiSession.notifications : null);
 
