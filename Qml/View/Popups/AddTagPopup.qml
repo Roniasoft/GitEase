@@ -235,7 +235,7 @@ IPopup {
                                     text: modelData.hint
                                     color: Style.colors.popupCheckboxLabelText
                                     font.family: Style.fontTypes.inter
-                                    font.pixelSize: smallPt
+                                    font.pixelSize: Style.appFont.smallPt
                                     visible: modelData.hint.length > 0
                                 }
 
