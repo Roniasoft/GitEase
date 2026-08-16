@@ -26,8 +26,31 @@ Page {
 
     property AppModel       appModel:           null
     property var            pluginController:   null
-    property var            pluginsData:        root.appModel ? root.appModel.plugins : []
-    property var            categoriesData:     root.appModel ? root.appModel.pluginsCategories : []
+
+    readonly property var   defaultCategories: [
+        { "color": "#60a5fa", "icon_url": "https://img.icons8.com/puffy-filled/32/warehouse-1.png", "id": "hosting", "name": "Hosting" },
+        { "color": "#fbbf24", "icon_url": "https://img.icons8.com/fluency-systems-filled/48/apps-tab.png", "id": "workflow", "name": "Workflow" },
+        { "color": "#4ADE80", "icon_url": "https://img.icons8.com/forma-bold/24/merge-git.png", "id": "merge", "name": "Merge" },
+        { "color": "#d97706", "icon_url": "https://img.icons8.com/ios-filled/50/squiggly-line.png", "id": "inspection", "name": "Inspection" },
+        { "color": "#a855f7", "icon_url": "https://img.icons8.com/ios-filled/50/electronic-brain.png", "id": "ai", "name": "AI" },
+        { "color": "#F87171", "icon_url": "https://img.icons8.com/fluency-systems-filled/48/keyhole-shield.png", "id": "security", "name": "Security" }
+    ]
+
+    readonly property var   defaultPlugins: [
+        { "id": "plug_013", "name": "AI Commit Writer", "description": "Generate high-quality commit messages instantly.", "author": "OpenAI Labs", "latest_version": "1.7.0", "min_app_version": "1.0.0", "size_kb": 1850, "icon_url": "https://img.icons8.com/glyph-neue/64/bard--v1.png", "release_date": "2026-06-14", "category": "ai", "downloads_count": 79100 },
+        { "id": "plug_008", "name": "Conflict Resolver", "description": "Resolve merge conflicts using a visual editor.", "author": "Community", "latest_version": "1.6.1", "min_app_version": "1.0.0", "size_kb": 760, "icon_url": "https://img.icons8.com/ios-glyphs/30/conflict--v1.png", "release_date": "2026-04-07", "category": "merge", "downloads_count": 29980 },
+        { "id": "plug_001", "name": "GitHub Hosting", "description": "Manage GitHub repositories, pull requests, and issues directly from GitEase.", "author": "GitEase", "latest_version": "2.0.1", "min_app_version": "1.0.0", "size_kb": 920, "icon_url": "https://img.icons8.com/glyph-neue/64/github.png", "release_date": "2026-06-01", "category": "hosting", "downloads_count": 54120 },
+        { "id": "plug_011", "name": "Large File Detector", "description": "Find oversized files before committing.", "author": "Community", "latest_version": "1.0.9", "min_app_version": "1.0.0", "size_kb": 290, "icon_url": "https://img.icons8.com/ios-glyphs/30/skyscrapers.png", "release_date": "2026-05-02", "category": "inspection", "downloads_count": 15680 },
+        { "id": "plug_020", "name": "Release Workflow", "description": "Automate tagging, changelogs, and release creation.", "author": "GitEase", "latest_version": "2.4.0", "min_app_version": "1.0.0", "size_kb": 1240, "icon_url": "https://img.icons8.com/ios-glyphs/30/code-fork.png", "release_date": "2026-06-18", "category": "workflow", "downloads_count": 33710 },
+        { "id": "plug_016", "name": "Secret Scanner", "description": "Detect API keys and secrets before pushing.", "author": "Security Team", "latest_version": "2.1.0", "min_app_version": "1.0.0", "size_kb": 720, "icon_url": "https://img.icons8.com/material-rounded/24/password1.png", "release_date": "2026-06-09", "category": "security", "downloads_count": 46800 },
+        { "id": "plug_004", "name": "Smart Workflow", "description": "Automate repetitive Git actions with custom workflows.", "author": "GitEase", "latest_version": "2.2.0", "min_app_version": "1.0.0", "size_kb": 840, "icon_url": "https://img.icons8.com/fluency-systems-filled/48/apps-tab.png", "release_date": "2026-06-12", "category": "workflow", "downloads_count": 42290 },
+        { "id": "plug_014", "name": "Code Reviewer AI", "description": "Review code changes using AI suggestions.", "author": "OpenAI Labs", "latest_version": "1.5.3", "min_app_version": "1.0.0", "size_kb": 2140, "icon_url": "https://img.icons8.com/parakeet-filled/48/code.png", "release_date": "2026-05-11", "category": "ai", "downloads_count": 58230 },
+        { "id": "plug_002", "name": "GitLab Integration", "description": "Browse projects and merge requests without leaving GitEase.", "author": "GitEase", "latest_version": "1.8.3", "min_app_version": "1.0.0", "size_kb": 1104, "icon_url": "https://img.icons8.com/windows/32/gitlab.png", "release_date": "2026-05-18", "category": "hosting", "downloads_count": 31250 },
+        { "id": "plug_010", "name": "Repository Inspector", "description": "Analyze repository health and code quality.", "author": "GitEase", "latest_version": "2.3.0", "min_app_version": "1.0.0", "size_kb": 1520, "icon_url": "https://img.icons8.com/puffy-filled/32/check-file.png", "release_date": "2026-06-03", "category": "inspection", "downloads_count": 37450 }
+    ]
+
+    property var            pluginsData:        root.appModel ? root.appModel.plugins : root.defaultPlugins
+    property var            categoriesData:     root.appModel ? root.appModel.pluginsCategories : root.defaultCategories
     property var            categoriesCounts:     ({})
     readonly property int   minCardWidth:       400
     readonly property int   minCardHeight:      250
@@ -75,6 +98,17 @@ Page {
 
     onCategoriesDataChanged: {
         leftPanel.categoriesData = root.categoriesData.slice()
+    }
+
+    Component.onCompleted: {
+        if (!root.appModel || !root.appModel.plugins || root.appModel.plugins.length === 0) {
+            root.pluginsData = root.defaultPlugins
+        }
+        if (!root.appModel || !root.appModel.pluginsCategories || root.appModel.pluginsCategories.length === 0) {
+            root.categoriesData = root.defaultCategories
+        }
+        applyCurrentMode()
+        buildCategoriesCounts()
     }
 
     /* Children
