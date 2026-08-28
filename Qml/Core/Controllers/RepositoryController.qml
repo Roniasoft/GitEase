@@ -31,6 +31,7 @@ GitRepository {
     /* Signals
      * ****************************************************************************************/
     signal repositorySelected(Repository repo)
+    signal cloneCompleted(var result)
 
     /* Repository color scheme
      * ****************************************************************************************/
@@ -97,7 +98,6 @@ GitRepository {
      * Clone a repository from URL to the specified local path
      */
     function cloneRepository(path, url) : bool {
-        let result = ({success: false})
         let repoName = extractRepoName(url)
         let protocol = detectGitProtocol(url)
 
@@ -108,33 +108,36 @@ GitRepository {
         if (protocol === RepositoryController.GitProtocol.Unknown) {
             if(notificationController)
                 notificationController.error(`Unsupported Git URL: ${url}`)
-            return result
+            return { success: false }
         }
 
         if (root.activeClones[clonedPath]) {
             if(notificationController)
                 notificationController.warning(`Clone already in progress: ${clonedPath}`)
-            return result
+            return { success: false }
         }
 
-        if (protocol === RepositoryController.GitProtocol.SSH)
-            result = clone(url, clonedPath)
-        else if (protocol === RepositoryController.GitProtocol.HTTP || protocol === RepositoryController.GitProtocol.HTTPS) {
-            result = clone(url, clonedPath, "")
-        }
+        root.activeClones[clonedPath] = true
 
-        root.activeClones[clonedPath] = result.success
+        let args = protocol === RepositoryController.GitProtocol.SSH ? [url, clonedPath] : [url, clonedPath, ""]
 
-        return result
+        AsyncGit.call(root, "clone", args,
+            function(result) { root.handleCloneResult(clonedPath, result) },
+            function(error) { root.handleCloneResult(clonedPath, { success: false, errorMessage: error }) }
+        )
+
+        return { success: true }
     }
 
-    onCloneFinished: function(result) {
-        root.activeClones[result.path] = false
+    function handleCloneResult(clonedPath, result) {
+        root.activeClones[clonedPath] = false
 
-        if(result.success) {
-            let repoName = result.path.split(/[\/:]/).pop()
-            createRepositoryComponent(result.path, repoName)
+        if (result && result.success) {
+            let repoName = (result.data || clonedPath).toString().split(/[\/:]/).pop()
+            createRepositoryComponent(result.data || clonedPath, repoName)
         }
+
+        root.cloneCompleted(result)
     }
 
     function closeRepo(path) {
