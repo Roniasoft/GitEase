@@ -123,7 +123,7 @@ GitRepository {
 
         AsyncGit.call(root, "clone", args,
             function(result) { root.handleCloneResult(clonedPath, result) },
-            function(error) { root.handleCloneResult(clonedPath, { success: false, errorMessage: error }) }
+            function(error) { root.handleCloneResult(clonedPath, { success: false, errorMessage: error, stale: error === AsyncGit.STALE }) }
         )
 
         return { success: true }
