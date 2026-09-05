@@ -155,8 +155,6 @@ UtilitiesCard {
                     itemContextMenu.open()
                 }
             }
-
-            onContentHeightChanged: root.pageScrollBlocking = stashListView.contentHeight > stashListView.height + 1
         }
 
         DashedButton {
