@@ -2,6 +2,8 @@ import QtQuick
 
 import GitEase
 
+import "qrc:/GitEase/Qml/Core/Scripts/AsyncGit.js" as AsyncGit
+
 /*! ***********************************************************************************************
  * RepositoryController
  * Manages repository operations including opening, cloning, and selecting repositories.
@@ -29,32 +31,42 @@ GitRepository {
     /* Signals
      * ****************************************************************************************/
     signal repositorySelected(Repository repo)
+    signal cloneCompleted(var result)
+
+    /* Repository color scheme
+     * ****************************************************************************************/
+    readonly property var repoColorPalette: [
+        "#FF5252", // red
+        "#FF9800", // orange
+        "#FFC400", // amber
+        "#00C853", // green
+        "#00B0FF", // light blue
+        "#2979FF", // blue
+        "#7C4DFF", // indigo
+        "#D500F9", // purple
+        "#FF4081", // pink
+        "#1DE9B6", // teal
+        "#76FF03", // lime
+        "#F50057"  // magenta
+    ]
+
+    function repoColor(key) {
+        var s = key ? String(key) : ""
+        var h = 0
+        for (var i = 0; i < s.length; ++i)
+            h = ((h << 5) - h + s.charCodeAt(i)) | 0
+        return root.repoColorPalette[Math.abs(h) % root.repoColorPalette.length]
+    }
+
+    function isValidRepoColor(c) {
+        if (!c)
+            return false
+        var s = String(c).toLowerCase()
+        return s !== "" && s !== "transparent" && s !== "#00000000"
+    }
 
     /* Functions
      * ****************************************************************************************/
-
-    // Random color assignment for repositories.
-    readonly property var repoColorPalette: [
-        "#aaFF1744", // neon red
-        "#aaFF9100", // vivid orange
-        "#aaFFD600", // bright yellow
-        "#aa00E676", // neon green
-        "#aa00B0FF", // bright cyan-blue
-        "#aa2979FF", // vivid blue
-        "#aa651FFF", // electric indigo
-        "#aaD500F9", // neon purple
-        "#aaFF4081", // hot pink
-        "#aa1DE9B6", // bright teal
-        "#aa76FF03", // lime
-        "#aaF50057"  // magenta
-    ]
-
-    function randomRepoColor() {
-        if (!root.repoColorPalette || root.repoColorPalette.length === 0)
-            return "#4E79A7"
-        const idx = Math.floor(Math.random() * root.repoColorPalette.length)
-        return root.repoColorPalette[idx]
-    }
 
     /**
      * Initialize a new Git repository
@@ -86,7 +98,6 @@ GitRepository {
      * Clone a repository from URL to the specified local path
      */
     function cloneRepository(path, url) : bool {
-        let result = ({success: false})
         let repoName = extractRepoName(url)
         let protocol = detectGitProtocol(url)
 
@@ -97,33 +108,36 @@ GitRepository {
         if (protocol === RepositoryController.GitProtocol.Unknown) {
             if(notificationController)
                 notificationController.error(`Unsupported Git URL: ${url}`)
-            return result
+            return { success: false }
         }
 
         if (root.activeClones[clonedPath]) {
             if(notificationController)
                 notificationController.warning(`Clone already in progress: ${clonedPath}`)
-            return result
+            return { success: false }
         }
 
-        if (protocol === RepositoryController.GitProtocol.SSH)
-            result = clone(url, clonedPath)
-        else if (protocol === RepositoryController.GitProtocol.HTTP || protocol === RepositoryController.GitProtocol.HTTPS) {
-            result = clone(url, clonedPath, "")
-        }
+        root.activeClones[clonedPath] = true
 
-        root.activeClones[clonedPath] = result.success
+        let args = protocol === RepositoryController.GitProtocol.SSH ? [url, clonedPath] : [url, clonedPath, ""]
 
-        return result
+        AsyncGit.call(root, "clone", args,
+            function(result) { root.handleCloneResult(clonedPath, result) },
+            function(error) { root.handleCloneResult(clonedPath, { success: false, errorMessage: error, stale: error === AsyncGit.STALE }) }
+        )
+
+        return { success: true }
     }
 
-    onCloneFinished: function(result) {
-        root.activeClones[result.path] = false
+    function handleCloneResult(clonedPath, result) {
+        root.activeClones[clonedPath] = false
 
-        if(result.success) {
-            let repoName = result.path.split(/[\/:]/).pop()
-            createRepositoryComponent(result.path, repoName)
+        if (result && result.success) {
+            let repoName = (result.data || clonedPath).toString().split(/[\/:]/).pop()
+            createRepositoryComponent(result.data || clonedPath, repoName)
         }
+
+        root.cloneCompleted(result)
     }
 
     function closeRepo(path) {
@@ -157,7 +171,8 @@ GitRepository {
                     id: "repo_" + Date.now(),
                     path: path,
                     name: name,
-                    color: repo ? repo.color : randomRepoColor()
+                    color: (repo && root.isValidRepoColor(repo.color)) ? repo.color
+                                                                       : root.repoColor(path)
                 })
                 
                 // Add to repositories array
